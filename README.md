@@ -1,10 +1,10 @@
 Navs Chess Game
 
-Board
+Board:
   Height
   Width
   
-Piece
+Piece:
   Colour
   BishopMovement = False
   PawnMovement = False
@@ -13,28 +13,28 @@ Piece
   KingMovement = False
   IsDead = False
 
-Rook inherits Piece
+Rook inherits Piece:
   RookMovement = True
 
-Knight inherits Piece
+Knight inherits Piece:
   KnightMovement = True
 
-Bishop inherits Piece
+Bishop inherits Piece:
   BishopMovement = True
 
-Queen inherits Piece
+Queen inherits Piece:
   RookMovement = True
   BishopMovement = True
 
-King inherits Piece
+King inherits Piece:
   KingMovement = True
 
-Pawn inherits Piece
+Pawn inherits Piece:
   PawnMovement = True
 
 
-Tech
-	Python
-    Tkinter
-  Github
-  VSCode
+Tech:
+	Python:
+    	Tkinter
+	Github:
+	VSCode:
