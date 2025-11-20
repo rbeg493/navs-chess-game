@@ -5,12 +5,12 @@ Board:
   Width
   
 Piece:
-  Colour
-  BishopMovement = False
-  PawnMovement = False
-  KnightMovement = False
-  RookMovement = False
-  KingMovement = False
+  Colour,
+  BishopMovement = False, 
+  PawnMovement = False, 
+  KnightMovement = False, 
+  RookMovement = False, 
+  KingMovement = False, 
   IsDead = False
 
 Rook inherits Piece:
@@ -23,7 +23,7 @@ Bishop inherits Piece:
   BishopMovement = True
 
 Queen inherits Piece:
-  RookMovement = True
+  RookMovement = True, 
   BishopMovement = True
 
 King inherits Piece:
