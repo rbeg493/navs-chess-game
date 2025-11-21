@@ -53,7 +53,6 @@ class choiceSelect:
         icon_start_y = cellHeight
         icon_spacing = 30
         for idx, piece in enumerate(playerReserve):
-            print(idx)
             icon_y = icon_start_y + idx * icon_spacing
             w.create_text(icon_x, icon_y, text=piece.icon, fill="blue", font=("Arial", 14, "bold"), anchor="w", tags=f"reserveList")
 
@@ -149,34 +148,45 @@ class choiceSelect:
         def on_mouse_click(event):
             col = event.x // cellWidth
             row = event.y // cellHeight
-            if 1 <= row <= boardHeight and 1 <= col <= boardWidth:
+            if playerReserve:
+                if boardHeight - 1 <= row <= boardHeight and 1 <= col <= boardWidth:
 
-                # Find the next player piece with width_pos == 0
-                # for piece in playerReserve:
-                while playerReserve:
+                    # Loop through player reserve to find a piece to place
                     piece = playerReserve.pop(0)
-                    if piece.width_pos == 0:
-                        piece.width_pos = col
-                        piece.height_pos = row
+                    playerArmy.append(piece)
+                    piece.width_pos = col
+                    piece.height_pos = row
 
-                        # Draw the icon in the clicked cell
-                        x = col * cellWidth + cellWidth // 2
-                        y = row * cellHeight + cellHeight // 2
-                        w.create_text(x, y, text=piece.icon, fill="blue", font=("Arial", 14, "bold"))
+                    # Draw the icon in the clicked cell
+                    x = col * cellWidth + cellWidth // 2
+                    y = row * cellHeight + cellHeight // 2
+                    w.create_text(x, y, text=piece.icon, fill="blue", font=("Arial", 14, "bold"))
 
-                        # Optionally, add to gameBoard.pieces
-                        gameBoard.pieces.append(piece)
+                    # Optionally, add to gameBoard.pieces
+                    gameBoard.pieces.append(piece)
 
-                        # Redraw player reserves
-                        w.delete("reserveList")
-                        self.listPlayerReserves(boardWidth, cellWidth, cellHeight, w, playerReserve)
-                        break
+                    # Redraw player reserves
+                    # Inefficient. Maybe optimize later.
+                    w.delete("reserveList")
+                    self.listPlayerReserves(boardWidth, cellWidth, cellHeight, w, playerReserve)
+                    
+                #elif :
+                    
+
 
         def on_mouse_move(event):
             col = event.x // cellWidth
             row = event.y // cellHeight
             # Only highlight valid board squares
-            if 1 <= row <= boardHeight and 1 <= col <= boardWidth:
+            if playerReserve:
+
+                # only highlight the last two rows
+                maxHeight = boardHeight - 1
+            else:
+                #highlight entire board
+                maxHeight = 1
+
+            if maxHeight <= row <= boardHeight and 1 <= col <= boardWidth:
                 cell = (row, col)
                 rect_id = rectangles.get(cell)
                 if rect_id:
