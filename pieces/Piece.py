@@ -9,6 +9,7 @@ class Piece:
     kingMovement = False
     isDead = False
 
+    # Width and height positions = col and row positions on the board
     width_pos = 0
     height_pos = 0
     icon = ""
