@@ -9,25 +9,32 @@ class choiceSelect:
 
     choiceList = []
     selected_choice = None
+    masterWindow = None
 
-    def __init__(self):
+    def __init__(self):      
         return
 
     def generate_choices(self):
         choiceNum = 3
+        self.choiceList.clear()
         for i in range(choiceNum):
             newChoice = Choice(random.randint(2, 4), random.randint(1, 10),5,5)
             self.choiceList.append(newChoice)
 
-    def display_choices(self):
+    def topWindowClose(window, masterWindow):
+        window.destroy()
+        masterWindow.deiconify()
+
+    def display_choices(self,masterWindow) :
         w = tk.Toplevel()
         w.title("Select a Choice")
         w.geometry("600x200")
+        w.protocol("WM_DELETE_WINDOW", lambda: choiceSelect.topWindowClose(w, masterWindow))
 
         def on_choice_click(idx):
-            w.destroy()  # Close the choice window
             self.selected_choice = self.choiceList[idx]
-            self.drawBoard(self.selected_choice)
+            w.destroy()  # Close the choice window
+            self.drawBoard(self.selected_choice,masterWindow)
 
         # Create a frame for each choice
         for idx, choice in enumerate(self.choiceList):
@@ -65,7 +72,7 @@ class choiceSelect:
 
 
 
-    def drawBoard(self, selectedChoice):
+    def drawBoard(self, selectedChoice, masterWindow):
         
         gameBoard = Board(selectedChoice.boardHeight, selectedChoice.boardWidth, [])
         playerArmy = []
@@ -97,7 +104,7 @@ class choiceSelect:
             playerReserve.append(newPiece)
 
 
-        m = Tk()
+        m = tk.Toplevel()
         frame = Frame(m)
         frame.pack(expand=YES, fill=BOTH)
 
@@ -108,6 +115,7 @@ class choiceSelect:
 
         w = Canvas(frame, width=((boardWidth + 2) * cellWidth), height=((boardHeight + 2) * cellHeight), bg="black")
         w.pack(expand=YES, fill=BOTH)
+        m.protocol("WM_DELETE_WINDOW", lambda: choiceSelect.topWindowClose(m, masterWindow))
 
 
         # Store rectangle IDs and their positions

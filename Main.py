@@ -6,7 +6,7 @@ def start_new_game(root):
 	root.withdraw()  # Hide the main window
 	cs = choiceSelect()
 	cs.generate_choices()
-	cs.display_choices()
+	cs.display_choices(root)
 
 
 root = tk.Tk()
