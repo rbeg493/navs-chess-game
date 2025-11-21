@@ -88,14 +88,14 @@ class choiceSelect:
         boardWidth = gameBoard.width
         boardHeight = gameBoard.height
 
-        w = Canvas(frame, width=((boardWidth + 2) * cellWidth), height=((boardHeight + 2) * cellHeight), bg="black")
+        w = Canvas(frame, width=((boardWidth + 3) * cellWidth), height=((boardHeight + 2) * cellHeight), bg="black")
         w.pack(expand=YES, fill=BOTH)
 
 
         # Store rectangle IDs and their positions
         rectangles = {}
         colors = {}
-        w.create_rectangle(0, 0, (boardWidth + 2) * cellWidth, (boardHeight + 2) * cellHeight, fill="saddlebrown")
+        w.create_rectangle(0, 0, (boardWidth + 3) * cellWidth, (boardHeight + 2) * cellHeight, fill="saddlebrown")
         for row in range(1, boardHeight+1):
             for col in range(1, boardWidth+1):
                 x1 = col * cellWidth
