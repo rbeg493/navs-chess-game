@@ -11,6 +11,7 @@ class Piece:
     down = 0
     left = 0
     right = 0
+    id = [height_pos, width_pos]
 
     
     def __init__(self, width_pos, height_pos, icon):
@@ -19,11 +20,11 @@ class Piece:
         self.icon = icon
 
     def __str__(self):
-        return f"Color: {self.color},row: {self.height_pos},col: {self.width_pos},icon: {self.icon}"
+        return f"Color: {self.color},id: {self.id},icon: {self.icon}"
     
     def isValidMove(self, newRow, newCol, board):
         # Unfinished
-        if not 1 <= newRow <= board.height and 1 <= newCol <= board.width:
+        if not(1 <= newRow <= board.height and 1 <= newCol <= board.width):
             return False
         for piece in board.pieces:
             if piece.color == self.color and piece.width_pos == newCol and piece.height_pos == newRow:

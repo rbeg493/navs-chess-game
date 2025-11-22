@@ -87,6 +87,7 @@ class choiceSelect:
                     tempHeightPos = random.randint(1, 2)
                 piece.width_pos = tempWidthPos
                 piece.height_pos = tempHeightPos
+                piece.id = [piece.height_pos, piece.width_pos]
             gameBoard.pieces.append(piece)
             
         # Generate player pieces
@@ -135,7 +136,9 @@ class choiceSelect:
             if 1 <= row <= boardHeight and 1 <= col <= boardWidth:
                 x = col * cellWidth + cellWidth // 2
                 y = row * cellHeight + cellHeight // 2
-                w.create_text(x, y, text=piece.icon, fill="red", font=("Arial", 14, "bold"))
+                w.create_text(x, y, text=piece.icon, fill="red", font=("Arial", 14, "bold"), tags=f"{piece.id[0]}_{piece.id[1]}")
+                
+    
 
         # Display player army icons to the right of the board
         self.listPlayerReserves(boardWidth, cellWidth, cellHeight, w, playerReserve)
@@ -157,11 +160,12 @@ class choiceSelect:
                     playerArmy.append(piece)
                     piece.width_pos = col
                     piece.height_pos = row
+                    piece.id = [row, col]
 
                     # Draw the icon in the clicked cell
                     x = col * cellWidth + cellWidth // 2
                     y = row * cellHeight + cellHeight // 2
-                    w.create_text(x, y, text=piece.icon, fill="blue", font=("Arial", 14, "bold"))
+                    w.create_text(x, y, text=piece.icon, fill="blue", font=("Arial", 14, "bold"), tags=f"{piece.id[0]}_{piece.id[1]}")
 
                     # Optionally, add to gameBoard.pieces
                     gameBoard.pieces.append(piece)
@@ -179,25 +183,29 @@ class choiceSelect:
                     return
                 
                 # Delete piece from old position by redrawing cell
-                old_x1 = self.pieceToMove.width_pos * cellWidth
-                old_y1 = self.pieceToMove.height_pos * cellHeight
-                old_x2 = old_x1 + cellWidth
-                old_y2 = old_y1 + cellHeight
-                if (self.pieceToMove.height_pos + self.pieceToMove.width_pos) % 2 == 0:
-                    old_color = "white"
-                else:
-                    old_color = "gray"
-                w.create_rectangle(old_x1, old_y1, old_x2, old_y2, fill=old_color)
-                
+                # old_x1 = self.pieceToMove.width_pos * cellWidth
+                # old_y1 = self.pieceToMove.height_pos * cellHeight
+                # old_x2 = old_x1 + cellWidth
+                # old_y2 = old_y1 + cellHeight
+                # if (self.pieceToMove.height_pos + self.pieceToMove.width_pos) % 2 == 0:
+                #     old_color = "white"
+                # else:
+                #     old_color = "gray"
+                # w.create_rectangle(old_x1, old_y1, old_x2, old_y2, fill=old_color)
+
+                # Delete old piece
+                w.delete(f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
 
                 # Move the selected piece to the new location
                 self.pieceToMove.width_pos = col
                 self.pieceToMove.height_pos = row
-
+                self.pieceToMove.id = [row, col]
                 # Draw the icon in the clicked cell
                 x = col * cellWidth + cellWidth // 2
                 y = row * cellHeight + cellHeight // 2
-                w.create_text(x, y, text=self.pieceToMove.icon, fill="blue", font=("Arial", 14, "bold"))
+                
+                
+                w.create_text(x, y, text=self.pieceToMove.icon, fill="blue", font=("Arial", 14, "bold"), tags=f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
                 self.pieceToMove = None
 
             else:
