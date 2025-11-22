@@ -64,22 +64,12 @@ class choiceSelect:
             icon_y = icon_start_y + idx * icon_spacing
             w.create_text(icon_x, icon_y, text=piece.icon, fill="blue", font=("Arial", 14, "bold"), anchor="w", tags=f"reserveList")
 
-        # idx = 0
-        # while playerReserve:
-        #     piece = playerReserve.pop(0)
-        #     icon_y = icon_start_y + idx * icon_spacing
-        #     w.create_text(icon_x, icon_y, text=piece.icon, fill="blue", font=("Arial", 14, "bold"), anchor="w")
-        #     idx += 1
-
-
-
     def drawBoard(self, selectedChoice, masterWindow):
         
         gameBoard = Board(selectedChoice.boardHeight, selectedChoice.boardWidth, [])
         playerArmy = []
         badArmy = []
         playerReserve = []
-
 
         # Generate enemies
         for i in range(selectedChoice.enemyNumber):
