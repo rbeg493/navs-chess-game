@@ -9,8 +9,8 @@ class Piece:
     icon = ""
     
     # Movement capabilities
-    up = 1
-    down = 0
+    up = 2
+    down = 1
     left = 0
     right = 0
     diag = 0
@@ -29,13 +29,11 @@ class Piece:
         return f"Color: {self.color},id: {self.id},icon: {self.icon}"
     
     def isValidMove(self, newRow, newCol, board):
-        # Check within board
-        if not(1 <= newRow <= board.height and 1 <= newCol <= board.width):
-            return False
-        # Check for same color piece in target
-        for piece in board.pieces:
-            if piece.color == self.color and piece.col == newCol and piece.row == newRow:
-                return False
+        # Check if highlighted green
+        fillColor = board.canvasPaint.itemcget(board.rectangles[(newRow, newCol)], "fill")
+        if fillColor == "green":
+            return True
+        return
         
         
 
@@ -51,21 +49,71 @@ class Piece:
 
         # Check up
         for i in range(1,self.up+1):
-            # Check if occupied by piece with same colour
+            canMove = True
 
-            board.canvasPaint.itemconfig(board.rectangles[(self.row - i, self.col)], fill="green")
+            # Check if occupied by piece with same colour
+            for piece in board.pieces:
+                if canMove == True and piece.col == self.col and piece.row == self.row - i and piece.color == self.color:
+                    canMove = False
+
+            # Check if target is on the board
+            if not(1 <= self.row - i <= board.height):
+                canMove = False
+                
+            # Highlight if valid
+            if canMove == True:
+                board.canvasPaint.itemconfig(board.rectangles[(self.row - i, self.col)], fill="green")
 
         # Check down
         for i in range(1,self.down+1):
-            board.canvasPaint.itemconfig(board.rectangles[(self.row+i, self.col)], fill="green")
+            canMove = True
+
+            # Check if occupied by piece with same colour
+            for piece in board.pieces:                
+                if canMove == True and piece.col == self.col and piece.row == self.row+i and piece.color == self.color:
+                    canMove = False
+
+            # Check if target is on the board
+            if not(1 <= self.row + i <= board.height):
+                canMove = False
+                
+            # Highlight if valid
+            if canMove == True:
+                board.canvasPaint.itemconfig(board.rectangles[(self.row + i, self.col)], fill="green")
 
         # Check left
         for i in range(1,self.left+1):
-            board.canvasPaint.itemconfig(board.rectangles[(self.col-i, self.row)], fill="green")
+            canMove = True
+
+            # Check if occupied by piece with same colour
+            for piece in board.pieces:                
+                if canMove == True and piece.col == self.col - i and piece.row == self.row and piece.color == self.color:
+                    canMove = False
+
+            # Check if target is on the board
+            if not(1 <= self.col -i <= board.height):
+                canMove = False
+                
+            # Highlight if valid
+            if canMove == True:
+                board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col-i)], fill="green")
         
         # Check down
         for i in range(1,self.right+1):
-            board.canvasPaint.itemconfig(board.rectangles[(self.col+i, self.row)], fill="green")
+            canMove = True
+
+            # Check if occupied by piece with same colour
+            for piece in board.pieces:                
+                if canMove == True and piece.col == self.col + i and piece.row == self.row and piece.color == self.color:
+                    canMove = False
+
+            # Check if target is on the board
+            if not(1 <= self.col +i <= board.height):
+                canMove = False
+                
+            # Highlight if valid
+            if canMove == True:
+                board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col+i)], fill="green")
 
     
 

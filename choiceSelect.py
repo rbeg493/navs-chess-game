@@ -113,7 +113,7 @@ class choiceSelect:
 
         # Store rectangle IDs and their positions
         rectangles = {}
-        colors = {}
+        colours = {}
         w.create_rectangle(0, 0, (boardWidth + 3) * cellWidth, (boardHeight + 2) * cellHeight, fill="saddlebrown")
         for row in range(1, boardHeight+1):
             for col in range(1, boardWidth+1):
@@ -127,7 +127,7 @@ class choiceSelect:
                     color = "gray"
                 rect_id = w.create_rectangle(x1, y1, x2, y2, fill=color, tags=f"cell_{row}_{col}")
                 rectangles[(row, col)] = rect_id
-                colors[(row, col)] = color
+                colours[(row, col)] = color
         gameBoard.rectangles = rectangles
 
         # Draw enemy piece names on their positions
@@ -223,6 +223,10 @@ class choiceSelect:
                 #enable highlighting any square
                 maxHeight = 1
 
+            # Disable highlighting if moving a piece
+            if self.pieceToMove:
+                return
+            
             if maxHeight <= row <= boardHeight and 1 <= col <= boardWidth:
                 cell = (row, col)
                 rect_id = rectangles.get(cell)
@@ -232,7 +236,7 @@ class choiceSelect:
                         # Restore previous cell color
                         if current_hover['cell']:
                             prev_rect = rectangles[current_hover['cell']]
-                            prev_color = colors[current_hover['cell']]
+                            prev_color = colours[current_hover['cell']]
                             w.itemconfig(prev_rect, fill=prev_color)
                         # Set new cell to yellow
                         w.itemconfig(rect_id, fill='yellow')
@@ -241,7 +245,7 @@ class choiceSelect:
                 # If not hovering over any cell, restore previous
                 if current_hover['cell']:
                     prev_rect = rectangles[current_hover['cell']]
-                    prev_color = colors[current_hover['cell']]
+                    prev_color = colours[current_hover['cell']]
                     w.itemconfig(prev_rect, fill=prev_color)
                     current_hover['cell'] = None
 
