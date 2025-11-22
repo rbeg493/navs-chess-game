@@ -154,26 +154,30 @@ class choiceSelect:
             row = event.y // cellHeight
             if playerReserve:
                 if boardHeight - 1 <= row <= boardHeight and 1 <= col <= boardWidth:
+                    
+                    # Ensure not placing on occupied square
+                    occupiedSquares = [(p.height_pos, p.width_pos) for p in gameBoard.pieces]
+                    if (row, col) not in occupiedSquares:
+                   
+                        # Loop through player reserve to find a piece to place
+                        piece = playerReserve.pop(0)
+                        playerArmy.append(piece)
+                        piece.width_pos = col
+                        piece.height_pos = row
+                        piece.id = [row, col]
 
-                    # Loop through player reserve to find a piece to place
-                    piece = playerReserve.pop(0)
-                    playerArmy.append(piece)
-                    piece.width_pos = col
-                    piece.height_pos = row
-                    piece.id = [row, col]
+                        # Draw the icon in the clicked cell
+                        x = col * cellWidth + cellWidth // 2
+                        y = row * cellHeight + cellHeight // 2
+                        w.create_text(x, y, text=piece.icon, fill="blue", font=("Arial", 14, "bold"), tags=f"{piece.id[0]}_{piece.id[1]}")
 
-                    # Draw the icon in the clicked cell
-                    x = col * cellWidth + cellWidth // 2
-                    y = row * cellHeight + cellHeight // 2
-                    w.create_text(x, y, text=piece.icon, fill="blue", font=("Arial", 14, "bold"), tags=f"{piece.id[0]}_{piece.id[1]}")
+                        # Optionally, add to gameBoard.pieces
+                        gameBoard.pieces.append(piece)
 
-                    # Optionally, add to gameBoard.pieces
-                    gameBoard.pieces.append(piece)
-
-                    # Redraw player reserves
-                    # Inefficient. Maybe optimize later.
-                    w.delete("reserveList")
-                    self.listPlayerReserves(boardWidth, cellWidth, cellHeight, w, playerReserve)
+                        # Redraw player reserves
+                        # Inefficient. Maybe optimize later.
+                        w.delete("reserveList")
+                        self.listPlayerReserves(boardWidth, cellWidth, cellHeight, w, playerReserve)
                     
             elif self.pieceToMove:
                 
@@ -181,17 +185,6 @@ class choiceSelect:
                 if not self.pieceToMove.isValidMove(row, col, gameBoard):
                     self.pieceToMove = None
                     return
-                
-                # Delete piece from old position by redrawing cell
-                # old_x1 = self.pieceToMove.width_pos * cellWidth
-                # old_y1 = self.pieceToMove.height_pos * cellHeight
-                # old_x2 = old_x1 + cellWidth
-                # old_y2 = old_y1 + cellHeight
-                # if (self.pieceToMove.height_pos + self.pieceToMove.width_pos) % 2 == 0:
-                #     old_color = "white"
-                # else:
-                #     old_color = "gray"
-                # w.create_rectangle(old_x1, old_y1, old_x2, old_y2, fill=old_color)
 
                 # Delete old piece
                 w.delete(f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
