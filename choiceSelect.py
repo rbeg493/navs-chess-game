@@ -73,7 +73,7 @@ class choiceSelect:
 
         # Generate enemies
         for i in range(selectedChoice.enemyNumber):
-            newPiece = Piece(0, 0, "Pawn")
+            newPiece = Piece(0, 0, "Pawn", "red")
             badArmy.append(newPiece)
 
         # Randomise enemy positions
@@ -91,7 +91,7 @@ class choiceSelect:
             
         # Generate player pieces
         for i in range(3):
-            newPiece = Piece(0, 0, "Pawn")
+            newPiece = Piece(0, 0, "Pawn", "blue")
             playerReserve.append(newPiece)
 
 

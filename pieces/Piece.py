@@ -7,16 +7,18 @@ class Piece:
     width_pos = 0
     height_pos = 0
     icon = ""
-    for_vertical = 1
+    
+    up = 0
     down = 0
     left = 0
     right = 0
 
     
-    def __init__(self, width_pos, height_pos, icon):
+    def __init__(self, width_pos, height_pos, icon, color):
         self.width_pos = width_pos
         self.height_pos = height_pos
         self.icon = icon
+        self.color = color
 
     def __str__(self):
         return f"Color: {self.color},row: {self.height_pos},col: {self.width_pos},icon: {self.icon}"
