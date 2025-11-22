@@ -182,13 +182,12 @@ class choiceSelect:
                     self.listPlayerReserves(boardWidth, cellWidth, cellHeight, w, playerReserve)
                     
             elif self.pieceToMove:
-                # # Select piece to move
-                # for piece in gameBoard.pieces:
-                #     # 
-                #     if piece.width_pos == col and piece.height_pos == row:
-                #         self.pieceToMove = None
-                #         break
-                    
+                
+                # Check if clicked cell is a valid move
+                if not self.pieceToMove.isValidMove(self.pieceToMove.height_pos, self.pieceToMove.width_pos, row, col, gameBoard):
+                    self.pieceToMove = None
+                    return
+                
                 # Delete piece from old position by redrawing cell
                 old_x1 = self.pieceToMove.width_pos * cellWidth
                 old_y1 = self.pieceToMove.height_pos * cellHeight
@@ -199,6 +198,7 @@ class choiceSelect:
                 else:
                     old_color = "gray"
                 w.create_rectangle(old_x1, old_y1, old_x2, old_y2, fill=old_color)
+                
 
                 # Move the selected piece to the new location
                 self.pieceToMove.width_pos = col
@@ -213,13 +213,10 @@ class choiceSelect:
             else:
 
                 # Select piece to move if clicked on own piece
-                for piece in gameBoard.pieces:
+                for piece in playerArmy:
                     if piece.width_pos == col and piece.height_pos == row:
                         self.pieceToMove = piece
-                        print(f'Selected piece at ({col}, {row}) to move.')
                         break
-
-
 
         def on_mouse_move(event):
             col = event.x // cellWidth

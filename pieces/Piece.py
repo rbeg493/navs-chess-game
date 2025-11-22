@@ -1,18 +1,17 @@
 
 
 class Piece:
-    colour = None
-    bishopMovement = False
-    pawnMovement = False
-    knightMovement = False
-    rookMovement = False
-    kingMovement = False
-    isDead = False
+    color = None
 
     # Width and height positions = col and row positions on the board
     width_pos = 0
     height_pos = 0
     icon = ""
+    up = 0
+    down = 0
+    left = 0
+    right = 0
+
     
     def __init__(self, width_pos, height_pos, icon):
         self.width_pos = width_pos
@@ -20,7 +19,12 @@ class Piece:
         self.icon = icon
 
     def __str__(self):
-        return f"Colour: {self.colour}, Bishop Movement: {self.bishopMovement}, Pawn Movement: {self.pawnMovement}, Knight Movement: {self.kingMovement}, Rook Movement: {self.rookMovement}, King Movement: {self.kingMovement}, Is Dead: {self.isDead}"
+        return f"Color: {self.color},row: {self.height_pos},col: {self.width_pos},icon: {self.icon}"
+    
+    def isValidMove(self, curRow, curCol, newRow, newCol, board):
+        # Unfinished
+        if 1 <= newRow <= board.height and 1 <= newCol <= board.width:
+            return True
     
 
 
