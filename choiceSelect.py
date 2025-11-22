@@ -184,7 +184,7 @@ class choiceSelect:
             elif self.pieceToMove:
                 
                 # Check if clicked cell is a valid move
-                if not self.pieceToMove.isValidMove(self.pieceToMove.height_pos, self.pieceToMove.width_pos, row, col, gameBoard):
+                if not self.pieceToMove.isValidMove(row, col, gameBoard):
                     self.pieceToMove = None
                     return
                 
