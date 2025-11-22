@@ -9,10 +9,10 @@ class Piece:
     icon = ""
     
     # Movement capabilities
-    up = 2
-    down = 1
-    left = 0
-    right = 0
+    up = 3
+    down = 3
+    left = 3
+    right = 3
     diag = 0
     
     id = [row, col]
@@ -33,88 +33,132 @@ class Piece:
         fillColor = board.canvasPaint.itemcget(board.rectangles[(newRow, newCol)], "fill")
         if fillColor == "green":
             return True
-        return
+        return False
         
-        
-
-        return True
     
     def highlightMoves(self, board):
-        #Checks for if target is in movement range
-        
-        #start from piece position and test each direction till max range
-        #does target contain a piece of same colour
-        #does target contain piece of other colour
-        #is target on map
+        '''
+        Highlights valid moves on the board by checking each direction
+        '''
 
-        # Check up
-        for i in range(1,self.up+1):
+        self.checkUp(board)
+        self.checkDown(board)
+        self.checkLeft(board)
+        self.checkRight(board)
+    
+    def checkUp (self, board):
+        '''
+        Start from piece position and test direction till max range. Cannot occupy same colour piece, can occupy different colour piece (stops after). Cannot jump over pieces. Cannot go off board. 
+        '''
+
+        for i in range(1,self.up + 1):
             canMove = True
 
-            # Check if occupied by piece with same colour
+            # Check if target cell up is occupied by piece with same colour
             for piece in board.pieces:
-                if canMove == True and piece.col == self.col and piece.row == self.row - i and piece.color == self.color:
-                    canMove = False
+                if piece.color == self.color:
+                    if piece.col == self.col and piece.row == self.row - i:
+                        canMove = False
+                        return
+                else:
+                    # Check if target cell up is occupied by piece with different colour
+                    if piece.col == self.col and piece.row == self.row - i:
+                        board.canvasPaint.itemconfig(board.rectangles[(self.row - i, self.col)], fill="green")
+                        return
 
-            # Check if target is on the board
+            # Check if target cell up is on the board
             if not(1 <= self.row - i <= board.height):
                 canMove = False
                 
-            # Highlight if valid
+            # Highlight cell if valid
             if canMove == True:
                 board.canvasPaint.itemconfig(board.rectangles[(self.row - i, self.col)], fill="green")
 
-        # Check down
-        for i in range(1,self.down+1):
+
+    def checkDown (self, board):
+        '''
+        Start from piece position and test direction till max range. Cannot occupy same colour piece, can occupy different colour piece (stops after). Cannot jump over pieces. Cannot go off board. 
+        '''
+
+        for i in range(1,self.down + 1):
             canMove = True
 
-            # Check if occupied by piece with same colour
-            for piece in board.pieces:                
-                if canMove == True and piece.col == self.col and piece.row == self.row+i and piece.color == self.color:
-                    canMove = False
+            # Check if target cell down is occupied by piece with same colour
+            for piece in board.pieces:
+                if piece.color == self.color:
+                    if piece.col == self.col and piece.row == self.row + i:
+                        canMove = False
+                        return
+                else:
+                    # Check if target cell down is occupied by piece with different colour
+                    if piece.col == self.col and piece.row == self.row + i:
+                        board.canvasPaint.itemconfig(board.rectangles[(self.row + i, self.col)], fill="green")
+                        return
 
-            # Check if target is on the board
+            # Check if target cell down is on the board
             if not(1 <= self.row + i <= board.height):
                 canMove = False
                 
-            # Highlight if valid
+            # Highlight cell if valid
             if canMove == True:
                 board.canvasPaint.itemconfig(board.rectangles[(self.row + i, self.col)], fill="green")
 
-        # Check left
-        for i in range(1,self.left+1):
+
+    def checkRight (self, board):
+        '''
+        Start from piece position and test direction till max range. Cannot occupy same colour piece, can occupy different colour piece (stops after). Cannot jump over pieces. Cannot go off board. 
+        '''
+
+        for i in range(1,self.right + 1):
             canMove = True
 
-            # Check if occupied by piece with same colour
-            for piece in board.pieces:                
-                if canMove == True and piece.col == self.col - i and piece.row == self.row and piece.color == self.color:
-                    canMove = False
+            # Check if target cell right is occupied by piece with same colour
+            for piece in board.pieces:
+                if piece.color == self.color:
+                    if piece.col == self.col + i and piece.row == self.row:
+                        canMove = False
+                        return
+                else:
+                    # Check if target cell right is occupied by piece with different colour
+                    if piece.col == self.col + i and piece.row == self.row:
+                        board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col + i)], fill="green")
+                        return
 
-            # Check if target is on the board
-            if not(1 <= self.col -i <= board.height):
+            # Check if target cell right is on the board
+            if not(1 <= self.col + i <= board.width):
                 canMove = False
                 
-            # Highlight if valid
+            # Highlight cell if valid
             if canMove == True:
-                board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col-i)], fill="green")
-        
-        # Check down
-        for i in range(1,self.right+1):
+                board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col + i)], fill="green")
+
+
+    def checkLeft (self, board):
+        '''
+        Start from piece position and test direction till max range. Cannot occupy same colour piece, can occupy different colour piece (stops after). Cannot jump over pieces. Cannot go off board. 
+        '''
+
+        for i in range(1,self.left + 1):
             canMove = True
 
-            # Check if occupied by piece with same colour
-            for piece in board.pieces:                
-                if canMove == True and piece.col == self.col + i and piece.row == self.row and piece.color == self.color:
-                    canMove = False
+            # Check if target cell left is occupied by piece with same colour
+            for piece in board.pieces:
+                if piece.color == self.color:
+                    if piece.col == self.col - i and piece.row == self.row:
+                        canMove = False
+                        return
+                else:
+                    # Check if target cell left is occupied by piece with different colour
+                    if piece.col == self.col - i and piece.row == self.row:
+                        board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col - i)], fill="green")
+                        return
 
-            # Check if target is on the board
-            if not(1 <= self.col +i <= board.height):
+            # Check if target cell left is on the board
+            if not(1 <= self.col - i <= board.width):
                 canMove = False
                 
-            # Highlight if valid
+            # Highlight cell if valid
             if canMove == True:
-                board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col+i)], fill="green")
-
-    
+                board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col - i)], fill="green")
 
 
