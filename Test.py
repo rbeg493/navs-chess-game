@@ -1,5 +1,2 @@
-from choiceSelect import choiceSelect
-
-asdf = choiceSelect()
-asdf.generate_choices()
-asdf.display_choices()
+for i in range(1,2+1):
+    print(i)

@@ -66,7 +66,7 @@ class choiceSelect:
 
     def drawBoard(self, selectedChoice, masterWindow):
         
-        gameBoard = Board(selectedChoice.boardHeight, selectedChoice.boardWidth, [])
+        gameBoard = Board(selectedChoice.boardHeight, selectedChoice.boardWidth, [], {})
         playerArmy = []
         badArmy = []
         playerReserve = []
@@ -106,6 +106,7 @@ class choiceSelect:
         boardHeight = gameBoard.height
 
         w = Canvas(frame, width=((boardWidth + 3) * cellWidth), height=((boardHeight + 2) * cellHeight), bg="black")
+        gameBoard.canvasPaint = w
         w.pack(expand=YES, fill=BOTH)
         m.protocol("WM_DELETE_WINDOW", lambda: choiceSelect.topWindowClose(m, masterWindow))
 
@@ -127,6 +128,7 @@ class choiceSelect:
                 rect_id = w.create_rectangle(x1, y1, x2, y2, fill=color, tags=f"cell_{row}_{col}")
                 rectangles[(row, col)] = rect_id
                 colors[(row, col)] = color
+        gameBoard.rectangles = rectangles
 
         # Draw enemy piece names on their positions
         for piece in badArmy:
@@ -207,16 +209,18 @@ class choiceSelect:
                 for piece in playerArmy:
                     if piece.width_pos == col and piece.height_pos == row:
                         self.pieceToMove = piece
+                        # Highlight valid moves
+                        piece.highlightMoves(gameBoard)
                         break
 
         def on_mouse_move(event):
             col = event.x // cellWidth
             row = event.y // cellHeight
-            # Only highlight valid board squares (last two rows for player)
+            # enable highlighting valid board squares (last two rows for player)
             if playerReserve:
                 maxHeight = boardHeight - 1
             else:
-                #highlight entire board
+                #enable highlighting any square
                 maxHeight = 1
 
             if maxHeight <= row <= boardHeight and 1 <= col <= boardWidth:
