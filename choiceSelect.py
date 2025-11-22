@@ -78,16 +78,16 @@ class choiceSelect:
 
         # Randomise enemy positions
         for piece in badArmy:
-            if piece.width_pos ==0:
+            if piece.col ==0:
                 tempWidthPos = random.randint(1, gameBoard.width)
                 tempHeightPos = random.randint(1, 2)
                 # Ensure no two enemies occupy the same position
-                while any(p.width_pos == tempWidthPos and p.height_pos == tempHeightPos for p in gameBoard.pieces):
+                while any(p.col == tempWidthPos and p.row == tempHeightPos for p in gameBoard.pieces):
                     tempWidthPos = random.randint(1, gameBoard.width)
                     tempHeightPos = random.randint(1, 2)
-                piece.width_pos = tempWidthPos
-                piece.height_pos = tempHeightPos
-                piece.id = [piece.height_pos, piece.width_pos]
+                piece.col = tempWidthPos
+                piece.row = tempHeightPos
+                piece.id = [piece.row, piece.col]
             gameBoard.pieces.append(piece)
             
         # Generate player pieces
@@ -132,9 +132,9 @@ class choiceSelect:
 
         # Draw enemy piece names on their positions
         for piece in badArmy:
-            # Assume piece.width_pos and piece.height_pos are 1-based
-            col = piece.width_pos
-            row = piece.height_pos
+            # Assume piece.col and piece.row are 1-based
+            col = piece.col
+            row = piece.row
             if 1 <= row <= boardHeight and 1 <= col <= boardWidth:
                 x = col * cellWidth + cellWidth // 2
                 y = row * cellHeight + cellHeight // 2
@@ -158,14 +158,14 @@ class choiceSelect:
                 if boardHeight - 1 <= row <= boardHeight and 1 <= col <= boardWidth:
                     
                     # Ensure not placing on occupied square
-                    occupiedSquares = [(p.height_pos, p.width_pos) for p in gameBoard.pieces]
+                    occupiedSquares = [(p.row, p.col) for p in gameBoard.pieces]
                     if (row, col) not in occupiedSquares:
                    
                         # Loop through player reserve to find a piece to place
                         piece = playerReserve.pop(0)
                         playerArmy.append(piece)
-                        piece.width_pos = col
-                        piece.height_pos = row
+                        piece.col = col
+                        piece.row = row
                         piece.id = [row, col]
 
                         # Draw the icon in the clicked cell
@@ -192,8 +192,8 @@ class choiceSelect:
                 w.delete(f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
 
                 # Move the selected piece to the new location
-                self.pieceToMove.width_pos = col
-                self.pieceToMove.height_pos = row
+                self.pieceToMove.col = col
+                self.pieceToMove.row = row
                 self.pieceToMove.id = [row, col]
                 # Draw the icon in the clicked cell
                 x = col * cellWidth + cellWidth // 2
@@ -207,7 +207,7 @@ class choiceSelect:
 
                 # Select piece to move if clicked on own piece
                 for piece in playerArmy:
-                    if piece.width_pos == col and piece.height_pos == row:
+                    if piece.col == col and piece.row == row:
                         self.pieceToMove = piece
                         # Highlight valid moves
                         piece.highlightMoves(gameBoard)

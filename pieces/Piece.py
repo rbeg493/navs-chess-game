@@ -4,8 +4,8 @@ class Piece:
     color = None
 
     # Width and height positions = col and row positions on the board
-    width_pos = 0
-    height_pos = 0
+    col = 0
+    row = 0
     icon = ""
     
     # Movement capabilities
@@ -15,13 +15,13 @@ class Piece:
     right = 0
     diag = 0
     
-    id = [height_pos, width_pos]
+    id = [row, col]
 
     
     
-    def __init__(self, width_pos, height_pos, icon, color):
-        self.width_pos = width_pos
-        self.height_pos = height_pos
+    def __init__(self, col, row, icon, color):
+        self.col = col
+        self.row = row
         self.icon = icon
         self.color = color
 
@@ -34,7 +34,7 @@ class Piece:
             return False
         # Check for same color piece in target
         for piece in board.pieces:
-            if piece.color == self.color and piece.width_pos == newCol and piece.height_pos == newRow:
+            if piece.color == self.color and piece.col == newCol and piece.row == newRow:
                 return False
         
         
@@ -51,22 +51,21 @@ class Piece:
 
         # Check up
         for i in range(1,self.up+1):
-            #highlight self.height_pos-i, self.width_pos
-            #get correct rectangle from rectangles list
-            #set its fill to the highlight colour
-            board.canvasPaint.itemconfig(board.rectangles[(self.height_pos - i, self.width_pos)], fill="green")
+            # Check if occupied by piece with same colour
+
+            board.canvasPaint.itemconfig(board.rectangles[(self.row - i, self.col)], fill="green")
 
         # Check down
         for i in range(1,self.down+1):
-            board.canvasPaint.itemconfig(board.rectangles[(self.height_pos+i, self.width_pos)], fill="green")
+            board.canvasPaint.itemconfig(board.rectangles[(self.row+i, self.col)], fill="green")
 
         # Check left
         for i in range(1,self.left+1):
-            board.canvasPaint.itemconfig(board.rectangles[(self.width_pos-i, self.height_pos)], fill="green")
+            board.canvasPaint.itemconfig(board.rectangles[(self.col-i, self.row)], fill="green")
         
         # Check down
         for i in range(1,self.right+1):
-            board.canvasPaint.itemconfig(board.rectangles[(self.width_pos+i, self.height_pos)], fill="green")
+            board.canvasPaint.itemconfig(board.rectangles[(self.col+i, self.row)], fill="green")
 
     
 
