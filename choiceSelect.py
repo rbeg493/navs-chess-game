@@ -10,6 +10,7 @@ class choiceSelect:
     choiceList = []
     selected_choice = None
     masterWindow = None
+    pieceToMove = None
 
     def __init__(self):      
         return
@@ -113,7 +114,7 @@ class choiceSelect:
         boardWidth = gameBoard.width
         boardHeight = gameBoard.height
 
-        w = Canvas(frame, width=((boardWidth + 2) * cellWidth), height=((boardHeight + 2) * cellHeight), bg="black")
+        w = Canvas(frame, width=((boardWidth + 3) * cellWidth), height=((boardHeight + 2) * cellHeight), bg="black")
         w.pack(expand=YES, fill=BOTH)
         m.protocol("WM_DELETE_WINDOW", lambda: choiceSelect.topWindowClose(m, masterWindow))
 
@@ -121,7 +122,7 @@ class choiceSelect:
         # Store rectangle IDs and their positions
         rectangles = {}
         colors = {}
-        w.create_rectangle(0, 0, (boardWidth + 2) * cellWidth, (boardHeight + 2) * cellHeight, fill="saddlebrown")
+        w.create_rectangle(0, 0, (boardWidth + 3) * cellWidth, (boardHeight + 2) * cellHeight, fill="saddlebrown")
         for row in range(1, boardHeight+1):
             for col in range(1, boardWidth+1):
                 x1 = col * cellWidth
@@ -153,7 +154,9 @@ class choiceSelect:
         current_hover = {'cell': None}
 
         # Handle click to place player piece
+         
         def on_mouse_click(event):
+
             col = event.x // cellWidth
             row = event.y // cellHeight
             if playerReserve:
@@ -178,17 +181,48 @@ class choiceSelect:
                     w.delete("reserveList")
                     self.listPlayerReserves(boardWidth, cellWidth, cellHeight, w, playerReserve)
                     
-                #elif :
-                    
+            elif self.pieceToMove:
+                
+                # Check if clicked cell is a valid move
+                if not self.pieceToMove.isValidMove(self.pieceToMove.height_pos, self.pieceToMove.width_pos, row, col, gameBoard):
+                    self.pieceToMove = None
+                    return
+                
+                # Delete piece from old position by redrawing cell
+                old_x1 = self.pieceToMove.width_pos * cellWidth
+                old_y1 = self.pieceToMove.height_pos * cellHeight
+                old_x2 = old_x1 + cellWidth
+                old_y2 = old_y1 + cellHeight
+                if (self.pieceToMove.height_pos + self.pieceToMove.width_pos) % 2 == 0:
+                    old_color = "white"
+                else:
+                    old_color = "gray"
+                w.create_rectangle(old_x1, old_y1, old_x2, old_y2, fill=old_color)
+                
 
+                # Move the selected piece to the new location
+                self.pieceToMove.width_pos = col
+                self.pieceToMove.height_pos = row
+
+                # Draw the icon in the clicked cell
+                x = col * cellWidth + cellWidth // 2
+                y = row * cellHeight + cellHeight // 2
+                w.create_text(x, y, text=self.pieceToMove.icon, fill="blue", font=("Arial", 14, "bold"))
+                self.pieceToMove = None
+
+            else:
+
+                # Select piece to move if clicked on own piece
+                for piece in playerArmy:
+                    if piece.width_pos == col and piece.height_pos == row:
+                        self.pieceToMove = piece
+                        break
 
         def on_mouse_move(event):
             col = event.x // cellWidth
             row = event.y // cellHeight
-            # Only highlight valid board squares
+            # Only highlight valid board squares (last two rows for player)
             if playerReserve:
-
-                # only highlight the last two rows
                 maxHeight = boardHeight - 1
             else:
                 #highlight entire board
