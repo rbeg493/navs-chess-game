@@ -40,6 +40,9 @@ class Piece:
         '''
         Highlights valid moves on the board by checking each direction
         '''
+        # Commented out code is possible future implementation using a single method for all directions
+        # for direction in ['up', 'down', 'left', 'right']:
+        #     self.checkDirection(direction, board)
 
         self.checkUp(board)
         self.checkDown(board)
@@ -48,7 +51,7 @@ class Piece:
     
     def checkUp (self, board):
         '''
-        Start from piece position and test direction till max range. Cannot occupy same colour piece, can occupy different colour piece (stops after). Cannot jump over pieces. Cannot go off board. 
+        Start from piece position and tests cells in direction till max range. Valid cell rules are: Cannot occupy same colour piece, can occupy different colour piece (stops after), Cannot jump over pieces, Cannot go off board. 
         '''
 
         for i in range(1,self.up + 1):
@@ -77,7 +80,7 @@ class Piece:
 
     def checkDown (self, board):
         '''
-        Start from piece position and test direction till max range. Cannot occupy same colour piece, can occupy different colour piece (stops after). Cannot jump over pieces. Cannot go off board. 
+        Start from piece position and tests cells in direction till max range. Valid cell rules are: Cannot occupy same colour piece, can occupy different colour piece (stops after), Cannot jump over pieces, Cannot go off board. 
         '''
 
         for i in range(1,self.down + 1):
@@ -106,7 +109,7 @@ class Piece:
 
     def checkRight (self, board):
         '''
-        Start from piece position and test direction till max range. Cannot occupy same colour piece, can occupy different colour piece (stops after). Cannot jump over pieces. Cannot go off board. 
+        Start from piece position and tests cells in direction till max range. Valid cell rules are: Cannot occupy same colour piece, can occupy different colour piece (stops after), Cannot jump over pieces, Cannot go off board. 
         '''
 
         for i in range(1,self.right + 1):
@@ -135,7 +138,7 @@ class Piece:
 
     def checkLeft (self, board):
         '''
-        Start from piece position and test direction till max range. Cannot occupy same colour piece, can occupy different colour piece (stops after). Cannot jump over pieces. Cannot go off board. 
+        Start from piece position and tests cells in direction till max range. Valid cell rules are: Cannot occupy same colour piece, can occupy different colour piece (stops after), Cannot jump over pieces, Cannot go off board. 
         '''
 
         for i in range(1,self.left + 1):
@@ -162,3 +165,4 @@ class Piece:
                 board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col - i)], fill="green")
 
 
+    
