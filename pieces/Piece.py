@@ -16,7 +16,7 @@ class Piece:
     diag = 0
     
     id = [row, col]
-
+    validMoveList = []
     
     
     def __init__(self, col, row, icon, color):
@@ -48,6 +48,8 @@ class Piece:
         self.checkDown(board)
         self.checkLeft(board)
         self.checkRight(board)
+        for cell in self.validMoveList:
+            board.canvasPaint.itemconfig(board.rectangles[(cell[0], cell[1])], fill="green")
     
     def checkUp (self, board):
         '''
@@ -66,7 +68,8 @@ class Piece:
                 else:
                     # Check if target cell up is occupied by piece with different colour
                     if piece.col == self.col and piece.row == self.row - i:
-                        board.canvasPaint.itemconfig(board.rectangles[(self.row - i, self.col)], fill="green")
+                        #board.canvasPaint.itemconfig(board.rectangles[(self.row - i, self.col)], fill="green")
+                        self.validMoveList.append((self.row - i, self.col))
                         return
 
             # Check if target cell up is on the board
@@ -75,7 +78,8 @@ class Piece:
                 
             # Highlight cell if valid
             if canMove == True:
-                board.canvasPaint.itemconfig(board.rectangles[(self.row - i, self.col)], fill="green")
+                #board.canvasPaint.itemconfig(board.rectangles[(self.row - i, self.col)], fill="green")
+                self.validMoveList.append((self.row - i, self.col))
 
 
     def checkDown (self, board):
@@ -95,7 +99,8 @@ class Piece:
                 else:
                     # Check if target cell down is occupied by piece with different colour
                     if piece.col == self.col and piece.row == self.row + i:
-                        board.canvasPaint.itemconfig(board.rectangles[(self.row + i, self.col)], fill="green")
+                        #board.canvasPaint.itemconfig(board.rectangles[(self.row + i, self.col)], fill="green")
+                        self.validMoveList.append((self.row + i, self.col))
                         return
 
             # Check if target cell down is on the board
@@ -104,7 +109,8 @@ class Piece:
                 
             # Highlight cell if valid
             if canMove == True:
-                board.canvasPaint.itemconfig(board.rectangles[(self.row + i, self.col)], fill="green")
+                #board.canvasPaint.itemconfig(board.rectangles[(self.row + i, self.col)], fill="green")
+                self.validMoveList.append((self.row + i, self.col))
 
 
     def checkRight (self, board):
@@ -124,7 +130,8 @@ class Piece:
                 else:
                     # Check if target cell right is occupied by piece with different colour
                     if piece.col == self.col + i and piece.row == self.row:
-                        board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col + i)], fill="green")
+                        #board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col + i)], fill="green")
+                        self.validMoveList.append((self.row, self.col + i))
                         return
 
             # Check if target cell right is on the board
@@ -133,7 +140,8 @@ class Piece:
                 
             # Highlight cell if valid
             if canMove == True:
-                board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col + i)], fill="green")
+                #board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col + i)], fill="green")
+                self.validMoveList.append((self.row, self.col + i))
 
 
     def checkLeft (self, board):
@@ -153,7 +161,8 @@ class Piece:
                 else:
                     # Check if target cell left is occupied by piece with different colour
                     if piece.col == self.col - i and piece.row == self.row:
-                        board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col - i)], fill="green")
+                        #board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col - i)], fill="green")
+                        self.validMoveList.append((self.row, self.col - i))
                         return
 
             # Check if target cell left is on the board
@@ -162,7 +171,15 @@ class Piece:
                 
             # Highlight cell if valid
             if canMove == True:
-                board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col - i)], fill="green")
+                #board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col - i)], fill="green")
+                self.validMoveList.append((self.row, self.col - i))
 
 
-    
+    def clearHighlights(self, board, colours):
+        '''
+        Clears all highlighted cells on the board
+        '''
+        for cell in self.validMoveList:
+            prev_rect = board.rectangles[cell]
+            prev_color = colours[cell]
+            board.canvasPaint.itemconfig(prev_rect, fill=prev_color)

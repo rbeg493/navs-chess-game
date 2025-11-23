@@ -15,6 +15,7 @@ class choiceSelect:
     def __init__(self):      
         return
 
+
     def generate_choices(self):
         choiceNum = 3
         self.choiceList.clear()
@@ -22,15 +23,18 @@ class choiceSelect:
             newChoice = Choice(random.randint(2, 4), random.randint(1, 10),5,5)
             self.choiceList.append(newChoice)
 
+
     def topWindowClose(window, masterWindow):
         window.destroy()
         masterWindow.deiconify()
+
 
     def display_choices(self,masterWindow) :
         w = tk.Toplevel()
         w.title("Select a Choice")
         w.geometry("600x200")
         w.protocol("WM_DELETE_WINDOW", lambda: choiceSelect.topWindowClose(w, masterWindow))
+
 
         def on_choice_click(idx):
             self.selected_choice = self.choiceList[idx]
@@ -129,7 +133,7 @@ class choiceSelect:
                 rectangles[(row, col)] = rect_id
                 colours[(row, col)] = color
         gameBoard.rectangles = rectangles
-
+        
         # Draw enemy piece names on their positions
         for piece in badArmy:
             # Assume piece.col and piece.row are 1-based
@@ -185,6 +189,8 @@ class choiceSelect:
                 
                 # Check if clicked cell is a valid move
                 if not self.pieceToMove.isValidMove(row, col, gameBoard):
+                    self.pieceToMove.clearHighlights(gameBoard, colours)
+                    self.pieceToMove.validMoveList.clear()
                     self.pieceToMove = None
                     return
 
@@ -195,13 +201,20 @@ class choiceSelect:
                 self.pieceToMove.col = col
                 self.pieceToMove.row = row
                 self.pieceToMove.id = [row, col]
+
                 # Draw the icon in the clicked cell
                 x = col * cellWidth + cellWidth // 2
                 y = row * cellHeight + cellHeight // 2
-                
-                
                 w.create_text(x, y, text=self.pieceToMove.icon, fill="blue", font=("Arial", 14, "bold"), tags=f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
+                
+                # clear highlights
+                self.pieceToMove.clearHighlights(gameBoard, colours)
+                self.pieceToMove.validMoveList.clear()
+
+                # Reset piece to move
                 self.pieceToMove = None
+
+
 
             else:
 
@@ -209,6 +222,7 @@ class choiceSelect:
                 for piece in playerArmy:
                     if piece.col == col and piece.row == row:
                         self.pieceToMove = piece
+
                         # Highlight valid moves
                         piece.highlightMoves(gameBoard)
                         break
@@ -216,6 +230,7 @@ class choiceSelect:
         def on_mouse_move(event):
             col = event.x // cellWidth
             row = event.y // cellHeight
+
             # enable highlighting valid board squares (last two rows for player)
             if playerReserve:
                 maxHeight = boardHeight - 1
