@@ -197,6 +197,13 @@ class choiceSelect:
                 # Delete old piece
                 w.delete(f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
 
+                # Delete any piece at the target location (capture)
+                w.delete(f"{row}_{col}")
+                enemyCheck = gameBoard.getPieceAt(row, col)
+                if enemyCheck:
+                    gameBoard.pieces.remove(enemyCheck)
+                
+
                 # Move the selected piece to the new location
                 self.pieceToMove.col = col
                 self.pieceToMove.row = row
