@@ -11,6 +11,8 @@ class choiceSelect:
     selected_choice = None
     masterWindow = None
     pieceToMove = None
+    playerArmy = []
+    badArmy = []
 
     def __init__(self):      
         return
@@ -68,23 +70,22 @@ class choiceSelect:
             icon_y = icon_start_y + idx * icon_spacing
             w.create_text(icon_x, icon_y, text=piece.icon, fill="blue", font=("Arial", 14, "bold"), anchor="w", tags=f"reserveList")
 
-    def drawBoard(self, selectedChoice, masterWindow):
-        
-        gameBoard = Board(selectedChoice.boardHeight, selectedChoice.boardWidth, [], {})
-        playerArmy = []
-        badArmy = []
-        playerReserve = []
+    def generateEnemies(self, gameBoard, selectedChoice):
+
+        # Clear existing enemies
+        self.badArmy.clear()
 
         # Generate enemies
         for i in range(selectedChoice.enemyNumber):
             newPiece = Piece(0, 0, "Pawn", "red")
-            badArmy.append(newPiece)
+            self.badArmy.append(newPiece)
 
         # Randomise enemy positions
-        for piece in badArmy:
+        for piece in self.badArmy:
             if piece.col ==0:
                 tempWidthPos = random.randint(1, gameBoard.width)
                 tempHeightPos = random.randint(1, 2)
+
                 # Ensure no two enemies occupy the same position
                 while any(p.col == tempWidthPos and p.row == tempHeightPos for p in gameBoard.pieces):
                     tempWidthPos = random.randint(1, gameBoard.width)
@@ -93,17 +94,23 @@ class choiceSelect:
                 piece.row = tempHeightPos
                 piece.id = [piece.row, piece.col]
             gameBoard.pieces.append(piece)
-            
-        # Generate player pieces
+
+
+    def generatePlayerPieces(self, playerReserve):
         for i in range(3):
             newPiece = Piece(0, 0, "Pawn", "blue")
             playerReserve.append(newPiece)
+        
 
-
+    def drawBoard(self, selectedChoice, masterWindow):
+        
+        gameBoard = Board(selectedChoice.boardHeight, selectedChoice.boardWidth, [], {})
+        playerReserve = []
         m = tk.Toplevel()
         frame = Frame(m)
         frame.pack(expand=YES, fill=BOTH)
 
+        # Board dimensions
         cellHeight = 50
         cellWidth = 50
         boardWidth = gameBoard.width
@@ -114,11 +121,13 @@ class choiceSelect:
         w.pack(expand=YES, fill=BOTH)
         m.protocol("WM_DELETE_WINDOW", lambda: choiceSelect.topWindowClose(m, masterWindow))
 
+        self.generateEnemies(gameBoard, selectedChoice)
+        self.generatePlayerPieces(playerReserve)
 
         # Store rectangle IDs and their positions
         rectangles = {}
         colours = {}
-        w.create_rectangle(0, 0, (boardWidth + 3) * cellWidth, (boardHeight + 2) * cellHeight, fill="saddlebrown")
+        w.create_rectangle(0, 0, (boardWidth + 3) * cellWidth, (boardHeight + 2) * cellHeight, fill="salmon4")
         for row in range(1, boardHeight+1):
             for col in range(1, boardWidth+1):
                 x1 = col * cellWidth
@@ -135,7 +144,7 @@ class choiceSelect:
         gameBoard.rectangles = rectangles
         
         # Draw enemy piece names on their positions
-        for piece in badArmy:
+        for piece in self.badArmy:
             # Assume piece.col and piece.row are 1-based
             col = piece.col
             row = piece.row
@@ -144,8 +153,6 @@ class choiceSelect:
                 y = row * cellHeight + cellHeight // 2
                 w.create_text(x, y, text=piece.icon, fill="red", font=("Arial", 14, "bold"), tags=f"{piece.id[0]}_{piece.id[1]}")
                 
-    
-
         # Display player army icons to the right of the board
         self.listPlayerReserves(boardWidth, cellWidth, cellHeight, w, playerReserve)
 
@@ -153,9 +160,7 @@ class choiceSelect:
         current_hover = {'cell': None}
 
         # Handle click to place player piece
-         
         def on_mouse_click(event):
-
             col = event.x // cellWidth
             row = event.y // cellHeight
             if playerReserve:
@@ -167,7 +172,7 @@ class choiceSelect:
                    
                         # Loop through player reserve to find a piece to place
                         piece = playerReserve.pop(0)
-                        playerArmy.append(piece)
+                        self.playerArmy.append(piece)
                         piece.col = col
                         piece.row = row
                         piece.id = [row, col]
@@ -203,7 +208,6 @@ class choiceSelect:
                 if enemyCheck:
                     gameBoard.pieces.remove(enemyCheck)
                 
-
                 # Move the selected piece to the new location
                 self.pieceToMove.col = col
                 self.pieceToMove.row = row
@@ -221,12 +225,9 @@ class choiceSelect:
                 # Reset piece to move
                 self.pieceToMove = None
 
-
-
             else:
-
                 # Select piece to move if clicked on own piece
-                for piece in playerArmy:
+                for piece in self.playerArmy:
                     if piece.col == col and piece.row == row:
                         self.pieceToMove = piece
 
@@ -277,4 +278,4 @@ class choiceSelect:
         #Run the window
         m.mainloop()
 
-pass
+
