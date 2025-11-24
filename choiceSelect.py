@@ -207,6 +207,7 @@ class choiceSelect:
                 enemyCheck = gameBoard.getPieceAt(row, col)
                 if enemyCheck:
                     gameBoard.pieces.remove(enemyCheck)
+                    self.badArmy.remove(enemyCheck)
                 
                 # Move the selected piece to the new location
                 self.pieceToMove.col = col
