@@ -22,7 +22,7 @@ class choiceSelect:
         choiceNum = 3
         self.choiceList.clear()
         for i in range(choiceNum):
-            newChoice = Choice(random.randint(2, 4), random.randint(1, 10),5,5)
+            newChoice = Choice(random.randint(2, 4), random.randint(1, 3),5,5)
             self.choiceList.append(newChoice)
 
 
@@ -208,6 +208,8 @@ class choiceSelect:
                 if enemyCheck:
                     gameBoard.pieces.remove(enemyCheck)
                     self.badArmy.remove(enemyCheck)
+                    #test for applying upgrade
+                    # self.applyUpgrade(selectedChoice.reward, m)
                 
                 # Move the selected piece to the new location
                 self.pieceToMove.col = col
@@ -276,7 +278,66 @@ class choiceSelect:
         w.bind('<Motion>', on_mouse_move)
         w.bind('<Button-1>', on_mouse_click)
 
+
         #Run the window
         m.mainloop()
 
+    def applyUpgrade(self, upgradeID, masterWindow):
+        #open army selection window
+        from tkinter import Frame, Label, Button
+        w = tk.Toplevel()
+        w.title("Apply Upgrade")
+        w.geometry("600x200")
+        w.protocol("WM_DELETE_WINDOW", lambda: choiceSelect.topWindowClose(w, masterWindow))
+
+        upgradeList = [
+            {"id": 1, "name": "+1 across"},
+            {"id": 2, "name": "+1 up/down"},
+            {"id": 3, "name": "+1 diagonal"}
+        ]
+
+        def on_choice_click(idx):
+            print(f"Upgrade applied to piece {idx}")
+            print(f"Current stats: Left {self.playerArmy[idx].left}, Right {self.playerArmy[idx].right}, Up {self.playerArmy[idx].up}, Down {self.playerArmy[idx].down}, Diagonal {self.playerArmy[idx].diag}")
+            if upgradeID == 1:
+                self.playerArmy[idx].right += 1
+                self.playerArmy[idx].left += 1
+            elif upgradeID == 2:
+                self.playerArmy[idx].up += 1
+                self.playerArmy[idx].down += 1
+            elif upgradeID == 3:
+                self.playerArmy[idx].diag += 1
+            print(f"New stats: Left {self.playerArmy[idx].left}, Right {self.playerArmy[idx].right}, Up {self.playerArmy[idx].up}, Down {self.playerArmy[idx].down}, Diagonal {self.playerArmy[idx].diag}")
+            #apply upgrade to selected piece
+            w.destroy()  # Close the choice window
+            # go back to main menu?
+            masterWindow.deiconify()
+
+
+        #display upgrade at the top
+        content = Frame(w)
+        frame = Frame(content, borderwidth=5, relief="ridge", width=200, height=100)
+        namelbl = Label(content, text=f"upgrade: {upgradeList[upgradeID - 1]['name']}")
+
+
+        content.grid(column=0, row=0)
+        namelbl.grid(column=0, row=0)
+        frame.grid(column=0, row=1, columnspan=3, rowspan=2)
+
+        #let player select a piece to upgrade
+        for idx, piece in enumerate(self.playerArmy):
+            
+            # Display piece selection
+            buttonList=[]
+            # Display a button for each piece that runs
+            for piece in self.playerArmy:
+                newButton = tk.Button(frame, text=f"Piece {idx+1}", command=lambda i=idx: on_choice_click(i))
+                newButton.grid(column=idx+1, row=1)
+                buttonList.append(newButton)
+
+
+        w.mainloop()
+        
+
+        return
 

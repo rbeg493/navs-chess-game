@@ -9,10 +9,10 @@ class Piece:
     icon = ""
     
     # Movement capabilities
-    up = 3
-    down = 3
-    left = 3
-    right = 3
+    up = 1
+    down = 0
+    left = 0
+    right = 0
     diag = 0
     
     id = [row, col]
