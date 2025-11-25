@@ -1,6 +1,6 @@
 from Choice import Choice
 import tkinter as tk
-from tkinter import Frame, Label
+from tkinter import Frame, Label, Button
 import random
 from LevelSetup import LevelSetup as setup
 
@@ -18,7 +18,7 @@ class choiceSelect:
         choiceNum = 3
         self.choiceList.clear()
         for i in range(choiceNum):
-            newChoice = Choice(random.randint(2, 4), random.randint(1, 10),5,5)
+            newChoice = Choice(random.randint(2, 4), random.randint(1, 3),5,5)
             self.choiceList.append(newChoice)
 
 
@@ -33,7 +33,6 @@ class choiceSelect:
             self.selected_choice = self.choiceList[idx]
             w.destroy()  # Close the choice window
             setup.drawBoard(setup, self.selected_choice, masterWindow)
-
 
         # Create a frame for each choice
         for idx, choice in enumerate(self.choiceList):
@@ -54,4 +53,4 @@ class choiceSelect:
             w.grid_columnconfigure(i, weight=1)
         w.mainloop()
 
-
+        
