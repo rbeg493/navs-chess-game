@@ -29,6 +29,10 @@ class Piece:
         return f"Color: {self.color},id: {self.id},icon: {self.icon}"
     
     def isValidMove(self, newRow, newCol, board):
+        # Check if on board
+        if not(1 <= newRow <= board.height and 1 <= newCol <= board.width):
+            return False
+
         # Check if highlighted green
         fillColor = board.canvasPaint.itemcget(board.rectangles[(newRow, newCol)], "fill")
         if fillColor == "green":
