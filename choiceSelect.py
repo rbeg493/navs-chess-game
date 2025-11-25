@@ -1,9 +1,7 @@
 from Choice import Choice
 import tkinter as tk
-from tkinter import Frame, Label, Tk, Canvas, YES, BOTH
+from tkinter import Frame, Label
 import random
-from Board import Board
-from pieces.Piece import Piece
 from LevelSetup import LevelSetup as setup
 
 class choiceSelect:
