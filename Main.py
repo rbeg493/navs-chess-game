@@ -7,13 +7,30 @@ from teamSelect import generatePlayerPieces
 
 def start_new_game(root):
 	playerReserve = []
-	root.withdraw()  # Hide the main window
+	badArmy = []
+	playerArmy = []
 	cs = choiceSelect(root)
-	generatePlayerPieces(playerReserve) # Select team composition
-	cs.generate_choices() # Select Level 
+
+	# Hide the main window
+	root.withdraw()  
+
+	# Select team composition
+	generatePlayerPieces(playerReserve) 
+
+	# Select Level 
+	cs.generate_choices() 
 	cs.display_choices(root)
-	root.wait_window(cs.childWindow)  # Wait until the choice window is closed
-	LevelSetup.drawBoard(LevelSetup,cs.selected_choice, root)
+
+	# Wait until the choice window is closed
+	root.wait_window(cs.childWindow)  
+
+	# Generate enemies based on selected choice
+	cs.generateEnemies(cs.selected_choice, badArmy)
+
+	# Draw game board
+	LevelSetup.drawBoard(LevelSetup,cs.selected_choice, root, playerReserve, badArmy)
+
+
 
 
 root = tk.Tk()

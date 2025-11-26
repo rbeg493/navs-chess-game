@@ -9,11 +9,10 @@ class LevelSetup:
 
     pieceToMove = None
     playerArmy = []
-    badArmy = []
 
-    def drawBoard(self, selectedChoice, masterWindow):
+
+    def drawBoard(self, selectedChoice, masterWindow, playerReserve, badArmy):
         gameBoard = Board(selectedChoice.boardHeight, selectedChoice.boardWidth, [], {})
-        playerReserve = []
         m = tk.Toplevel()
         frame = Frame(m)
         frame.pack(expand=YES, fill=BOTH)
@@ -29,8 +28,8 @@ class LevelSetup:
         w.pack(expand=YES, fill=BOTH)
         m.protocol("WM_DELETE_WINDOW", lambda: self.topWindowClose(m, masterWindow))
 
-        self.generateEnemies(self, gameBoard, selectedChoice)
-        self.generatePlayerPieces(self, playerReserve)
+        self.placeEnemies(self, gameBoard, badArmy)
+        
 
         # Store rectangle IDs and their positions
         rectangles = {}
@@ -52,7 +51,7 @@ class LevelSetup:
         gameBoard.rectangles = rectangles
         
         # Draw enemy piece names on their positions
-        for piece in self.badArmy:
+        for piece in badArmy:
             # Assume piece.col and piece.row are 1-based
             col = piece.col
             row = piece.row
@@ -115,7 +114,7 @@ class LevelSetup:
                 enemyCheck = gameBoard.getPieceAt(row, col)
                 if enemyCheck:
                     gameBoard.pieces.remove(enemyCheck)
-                    self.badArmy.remove(enemyCheck)
+                    badArmy.remove(enemyCheck)
                     self.applyUpgrade(self, selectedChoice.reward, m)
                 
                 # Move the selected piece to the new location
@@ -189,18 +188,10 @@ class LevelSetup:
         m.mainloop()
 
 
-    def generateEnemies(self, gameBoard, selectedChoice):
-
-        # Clear existing enemies
-        self.badArmy.clear()
-
-        # Generate enemies
-        for i in range(selectedChoice.enemyNumber):
-            newPiece = Piece(0, 0, "Pawn", "red")
-            self.badArmy.append(newPiece)
+    def placeEnemies(self, gameBoard, badArmy):
 
         # Randomise enemy positions
-        for piece in self.badArmy:
+        for piece in badArmy:
             if piece.col ==0:
                 tempWidthPos = random.randint(1, gameBoard.width)
                 tempHeightPos = random.randint(1, 2)
@@ -213,12 +204,6 @@ class LevelSetup:
                 piece.row = tempHeightPos
                 piece.id = [piece.row, piece.col]
             gameBoard.pieces.append(piece)
-
-
-    def generatePlayerPieces(self, playerReserve):
-        for i in range(3):
-            newPiece = Piece(0, 0, "Pawn", "blue")
-            playerReserve.append(newPiece)
 
 
     def listPlayerReserves(self, boardWidth, cellWidth, cellHeight, w, playerReserve):

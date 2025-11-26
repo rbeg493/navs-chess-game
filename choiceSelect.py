@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import Frame, Label, Button
 import random
 from LevelSetup import LevelSetup as setup
+from pieces.Piece import Piece
 
 class choiceSelect:
 
@@ -56,5 +57,14 @@ class choiceSelect:
             w.grid_columnconfigure(i, weight=1)
         #w.mainloop()
 
+
+    def generateEnemies(self, selectedChoice, badArmy):
+        # Clear existing enemies
+        badArmy.clear()
+
+        # Generate enemies
+        for i in range(selectedChoice.enemyNumber):
+            newPiece = Piece(0, 0, "Pawn", "red")
+            badArmy.append(newPiece)
 
         
