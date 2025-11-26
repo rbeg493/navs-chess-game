@@ -242,15 +242,17 @@ class LevelSetup:
         w.protocol("WM_DELETE_WINDOW", lambda: self.topWindowClose(w, masterWindow))
 
         upgradeList = [
-            {"id": 1, "name": "+1 across"},
-            {"id": 2, "name": "+1 up/down"},
-            {"id": 3, "name": "+1 diagonal"}
+            {"id": 1, "name": "+1 Left / Right"},
+            {"id": 2, "name": "+1 Up / Down"},
+            {"id": 3, "name": "+1 Diagonal"}
         ]
 
 
         def on_choice_click(idx):
             print(f"Upgrade applied to piece {idx}")
-            print(f"Current stats: Left {self.playerArmy[idx].left}, Right {self.playerArmy[idx].right}, Up {self.playerArmy[idx].up}, Down {self.playerArmy[idx].down}, Diagonal {self.playerArmy[idx].diag}")
+            print(f"Old stats: Left {self.playerArmy[idx].left}, Right {self.playerArmy[idx].right}, Up {self.playerArmy[idx].up}, Down {self.playerArmy[idx].down}, Diagonal down right {self.playerArmy[idx].diagDownRight}, Diagonal up right {self.playerArmy[idx].diagUpRight}, Diagonal down left {self.playerArmy[idx].diagDownLeft}, Diagonal up left {self.playerArmy[idx].diagUpLeft}")
+
+            #apply upgrade to selected piece
             if upgradeID == 1:
                 self.playerArmy[idx].right += 1
                 self.playerArmy[idx].left += 1
@@ -258,10 +260,15 @@ class LevelSetup:
                 self.playerArmy[idx].up += 1
                 self.playerArmy[idx].down += 1
             elif upgradeID == 3:
-                self.playerArmy[idx].diag += 1
-            print(f"New stats: Left {self.playerArmy[idx].left}, Right {self.playerArmy[idx].right}, Up {self.playerArmy[idx].up}, Down {self.playerArmy[idx].down}, Diagonal {self.playerArmy[idx].diag}")
-            #apply upgrade to selected piece
-            w.destroy()  # Close the choice window
+                self.playerArmy[idx].diagDownRight += 1
+                self.playerArmy[idx].diagUpRight += 1
+                self.playerArmy[idx].diagDownLeft += 1
+                self.playerArmy[idx].diagUpLeft += 1
+            print(f"New stats: Left {self.playerArmy[idx].left}, Right {self.playerArmy[idx].right}, Up {self.playerArmy[idx].up}, Down {self.playerArmy[idx].down}, Diagonal down right {self.playerArmy[idx].diagDownRight}, Diagonal up right {self.playerArmy[idx].diagUpRight}, Diagonal down left {self.playerArmy[idx].diagDownLeft}, Diagonal up left {self.playerArmy[idx].diagUpLeft}")
+
+            # Close the choice window
+            w.destroy()  
+
             # go back to main menu?
             masterWindow.deiconify()
 
