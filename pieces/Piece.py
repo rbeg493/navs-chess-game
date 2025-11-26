@@ -13,11 +13,10 @@ class Piece:
     down = 0
     left = 0
     right = 0
-    diag = 0
-    diagDownRight = 1
-    diagUpRight = 2
-    diagDownLeft = 3
-    diagUpLeft = 4
+    diagDownRight = 0
+    diagUpRight = 0
+    diagDownLeft = 0
+    diagUpLeft = 0
     
     id = [row, col]
     validMoveList = []
