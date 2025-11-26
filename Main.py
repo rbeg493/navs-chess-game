@@ -1,12 +1,15 @@
 
 import tkinter as tk
 from choiceSelect import choiceSelect
+from LevelSetup import LevelSetup
 
 def start_new_game(root):
 	root.withdraw()  # Hide the main window
-	cs = choiceSelect()
+	cs = choiceSelect(root)
 	cs.generate_choices()
 	cs.display_choices(root)
+	root.wait_window(cs.childWindow)  # Wait until the choice window is closed
+	LevelSetup.drawBoard(LevelSetup,cs.selected_choice, root)
 
 
 root = tk.Tk()

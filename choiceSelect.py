@@ -9,9 +9,10 @@ class choiceSelect:
     choiceList = []
     selected_choice = None
     masterWindow = None
+    childWindow=None
 
-    def __init__(self):      
-        return
+    def __init__(self,masterWindow):
+        self.masterWindow = masterWindow
 
 
     def generate_choices(self):
@@ -24,6 +25,7 @@ class choiceSelect:
 
     def display_choices(self,masterWindow) :
         w = tk.Toplevel()
+        self.childWindow=w
         w.title("Select a Choice")
         w.geometry("600x200")
         w.protocol("WM_DELETE_WINDOW", lambda: choiceSelect.topWindowClose(w, masterWindow))
@@ -32,7 +34,8 @@ class choiceSelect:
         def on_choice_click(idx):
             self.selected_choice = self.choiceList[idx]
             w.destroy()  # Close the choice window
-            setup.drawBoard(setup, self.selected_choice, masterWindow)
+            
+            #setup.drawBoard(setup, self.selected_choice, masterWindow)
 
         # Create a frame for each choice
         for idx, choice in enumerate(self.choiceList):
@@ -51,6 +54,7 @@ class choiceSelect:
         # Make columns expand equally
         for i in range(3):
             w.grid_columnconfigure(i, weight=1)
-        w.mainloop()
+        #w.mainloop()
+
 
         
