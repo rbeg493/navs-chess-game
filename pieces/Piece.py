@@ -14,10 +14,14 @@ class Piece:
     left = 0
     right = 0
     diag = 0
+    diagDownRight = 1
+    diagUpRight = 2
+    diagDownLeft = 3
+    diagUpLeft = 4
     
     id = [row, col]
     validMoveList = []
-    
+
     
     def __init__(self, col, row, icon, color):
         self.col = col
@@ -52,6 +56,11 @@ class Piece:
         self.checkDown(board)
         self.checkLeft(board)
         self.checkRight(board)
+        self.checkDiagUpLeft(board)
+        self.checkDiagUpRight(board)
+        self.checkDiagDownLeft(board)
+        self.checkDiagDownRight(board)
+
         for cell in self.validMoveList:
             board.canvasPaint.itemconfig(board.rectangles[(cell[0], cell[1])], fill="green")
     
@@ -177,6 +186,122 @@ class Piece:
             if canMove == True:
                 #board.canvasPaint.itemconfig(board.rectangles[(self.row, self.col - i)], fill="green")
                 self.validMoveList.append((self.row, self.col - i))
+
+
+    def checkDiagUpLeft (self, board):
+        '''
+        Start from piece position and tests cells in direction till max range. Valid cell rules are: Cannot occupy same colour piece, can occupy different colour piece (stops after), Cannot jump over pieces, Cannot go off board. 
+        '''
+
+        for i in range(1,self.diagUpLeft + 1):
+            canMove = True
+
+            # Check if target cell diagonal down left is occupied by piece with same colour
+            for piece in board.pieces:
+                if piece.color == self.color:
+                    if (piece.col == self.col - i and piece.row == self.row - i):
+                        canMove = False
+                        return
+                else:
+                    # Check if target cell diagonal down left is occupied by piece with different colour
+                    if (piece.col == self.col - i and piece.row == self.row - i):
+                        self.validMoveList.append((self.row - i, self.col - i))
+                        return
+
+            # Check if target cell diagonal down left is on the board
+            if not(1 <= self.row - i <= board.height) or not(1 <= self.col - i <= board.width):
+                canMove = False
+                
+            # Highlight cell if valid
+            if canMove == True:
+                self.validMoveList.append((self.row - i, self.col - i))
+
+
+    def checkDiagUpRight (self, board):
+        '''
+        Start from piece position and tests cells in direction till max range. Valid cell rules are: Cannot occupy same colour piece, can occupy different colour piece (stops after), Cannot jump over pieces, Cannot go off board. 
+        '''
+
+        for i in range(1,self.diagUpRight + 1):
+            canMove = True
+
+            # Check if target cell diagonal up right is occupied by piece with same colour
+            for piece in board.pieces:
+                if piece.color == self.color:
+                    if (piece.col == self.col + i and piece.row == self.row - i):
+                        canMove = False
+                        return
+                else:
+                    # Check if target cell diag up right is occupied by piece with different colour
+                    if (piece.col == self.col + i and piece.row == self.row - i):
+                        self.validMoveList.append((self.row - i, self.col + i))
+                        return
+
+            # Check if target cell diag up right is on the board
+            if not(1 <= self.row - i <= board.height) or not(1 <= self.col + i <= board.width):
+                canMove = False
+                
+            # Highlight cell if valid
+            if canMove == True:
+                self.validMoveList.append((self.row - i, self.col + i))
+
+
+    def checkDiagDownLeft (self, board):
+        '''
+        Start from piece position and tests cells in direction till max range. Valid cell rules are: Cannot occupy same colour piece, can occupy different colour piece (stops after), Cannot jump over pieces, Cannot go off board. 
+        '''
+
+        for i in range(1,self.diagDownLeft + 1):
+            canMove = True
+
+            # Check if target cell diagonal down left is occupied by piece with same colour
+            for piece in board.pieces:
+                if piece.color == self.color:
+                    if (piece.col == self.col - i and piece.row == self.row + i):
+                        canMove = False
+                        return
+                else:
+                    # Check if target cell diagonal down left is occupied by piece with different colour
+                    if (piece.col == self.col - i and piece.row == self.row + i):
+                        self.validMoveList.append((self.row + i, self.col - i))
+                        return
+
+            # Check if target cell diagonal down left is on the board
+            if not(1 <= self.row + i <= board.height) or not(1 <= self.col - i <= board.width):
+                canMove = False
+                
+            # Highlight cell if valid
+            if canMove == True:
+                self.validMoveList.append((self.row + i, self.col - i))
+
+
+    def checkDiagDownRight (self, board):
+        '''
+        Start from piece position and tests cells in direction till max range. Valid cell rules are: Cannot occupy same colour piece, can occupy different colour piece (stops after), Cannot jump over pieces, Cannot go off board. 
+        '''
+
+        for i in range(1,self.diagDownRight + 1):
+            canMove = True
+
+            # Check if target cell diagonal down right is occupied by piece with same colour
+            for piece in board.pieces:
+                if piece.color == self.color:
+                    if (piece.col == self.col + i and piece.row == self.row + i):
+                        canMove = False
+                        return
+                else:
+                    # Check if target cell diagonal down right is occupied by piece with different colour
+                    if (piece.col == self.col + i and piece.row == self.row + i):
+                        self.validMoveList.append((self.row + i, self.col + i))
+                        return
+
+            # Check if target cell diagonal down right is on the board
+            if not(1 <= self.row + i <= board.height) or not(1 <= self.col + i <= board.width):
+                canMove = False
+                
+            # Highlight cell if valid
+            if canMove == True:
+                self.validMoveList.append((self.row + i, self.col + i))
 
 
     def clearHighlights(self, board, colours):
