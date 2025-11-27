@@ -1,8 +1,9 @@
 
 import tkinter as tk
 from choiceSelect import choiceSelect
-from LevelSetup import LevelSetup
+from LevelSetup import *
 from teamSelect import generatePlayerPieces
+from Gameplay import *
 
 
 def start_new_game(root):
@@ -10,6 +11,7 @@ def start_new_game(root):
 	badArmy = []
 	playerArmy = []
 	cs = choiceSelect(root)
+	ls = LevelSetup()
 
 	# Hide the main window
 	root.withdraw()  
@@ -28,7 +30,19 @@ def start_new_game(root):
 	cs.generateEnemies(cs.selected_choice, badArmy)
 
 	# Draw game board
-	LevelSetup.drawBoard(LevelSetup,cs.selected_choice, root, playerReserve, badArmy)
+	gameBoard, m, w, rectangles, colours = ls.drawBoard(cs.selected_choice, root, playerReserve, badArmy, playerArmy)
+	root.wait_variable(ls.setupComplete)
+
+	# Play the game
+	game = Gameplay(playerArmy, gameBoard, badArmy)
+	game.playGame(m, w, rectangles, colours, cs.selected_choice)
+	root.wait_variable(game.levelComplete)
+
+	# Level complete screen
+	print("Congratulations you won!!!!")
+		
+	
+
 
 
 
@@ -39,5 +53,3 @@ root.geometry("300x150")
 btn = tk.Button(root, text="New Game", font=("Arial", 16), command=lambda: start_new_game(root))
 btn.pack(expand=True, fill=tk.BOTH, padx=40, pady=40)
 root.mainloop()
-
-
