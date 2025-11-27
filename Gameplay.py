@@ -5,16 +5,19 @@ from tkinter import *
 class Gameplay:
 
     levelComplete = None
+    upgradeComplete = None
 
     def __init__(self, playerArmy, gameBoard, badArmy):
         self.playerArmy = playerArmy
         self.gameBoard = gameBoard
         self.badArmy = badArmy
         self.pieceToMove = None
+
         
     def applyUpgrade(self, upgradeID, masterWindow):
-        
-        #open army selection window
+        self.upgradeComplete = BooleanVar(value=False)
+
+        # open upgrade window
         w = Toplevel()
         w.title("Apply Upgrade")
         w.geometry("600x200")
@@ -49,7 +52,8 @@ class Gameplay:
             w.destroy()  
 
             # go back to main menu?
-            masterWindow.deiconify()
+            self.upgradeComplete.set(TRUE)
+            #masterWindow.deiconify()
 
 
         #display upgrade at the top
@@ -128,13 +132,13 @@ class Gameplay:
 
                 # Check if level is finished
                 if not self.badArmy or not self.playerArmy:
-                    self.levelComplete.set(True)
+                    
                     w.unbind('<Motion>')
                     w.unbind('<Button-1>')
-                    topWindowClose(self, m)
-
-                    #.deiconify()
                     self.applyUpgrade(selectedChoice.reward, m)
+                    m.master.wait_variable(self.upgradeComplete)
+                    m.destroy()
+                    self.levelComplete.set(True)
 
             else:
                 # Select piece to move if clicked on own piece
@@ -179,17 +183,10 @@ class Gameplay:
                             prev_color = colours[current_hover['cell']]
                             w.itemconfig(prev_rect, fill=prev_color)
                             current_hover['cell'] = None
-
-
-        def topWindowClose(self, window):
-            window.master.deiconify()
-            window.destroy()
             
 
         w.bind('<Motion>', on_mouse_move)
         w.bind('<Button-1>', on_mouse_click)
 
-        # Run the window
-        #w.update_window()
 
        
