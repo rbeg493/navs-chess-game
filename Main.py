@@ -1,15 +1,50 @@
 
 import tkinter as tk
 from choiceSelect import choiceSelect
-from LevelSetup import LevelSetup
+from LevelSetup import *
+from teamSelect import generatePlayerPieces
+from Gameplay import *
+
 
 def start_new_game(root):
-	root.withdraw()  # Hide the main window
+	playerReserve = []
+	badArmy = []
+	playerArmy = []
 	cs = choiceSelect(root)
-	cs.generate_choices()
+	ls = LevelSetup()
+
+	# Hide the main window
+	root.withdraw()  
+
+	# Select team composition
+	generatePlayerPieces(playerReserve) 
+
+	# Select Level 
+	cs.generate_choices() 
 	cs.display_choices(root)
-	root.wait_window(cs.childWindow)  # Wait until the choice window is closed
-	LevelSetup.drawBoard(LevelSetup,cs.selected_choice, root)
+
+	# Wait until the choice window is closed
+	root.wait_window(cs.childWindow)  
+
+	# Generate enemies based on selected choice
+	cs.generateEnemies(cs.selected_choice, badArmy)
+
+	# Draw game board
+	gameBoard, m, w, rectangles, colours = ls.drawBoard(cs.selected_choice, root, playerReserve, badArmy, playerArmy)
+	root.wait_variable(ls.setupComplete)
+
+	# Play the game
+	game = Gameplay(playerArmy, gameBoard, badArmy)
+	game.playGame(m, w, rectangles, colours, cs.selected_choice)
+	root.wait_variable(game.levelComplete)
+
+	# Level complete screen
+	print("Congratulations you won!!!!")
+		
+	
+
+
+
 
 
 root = tk.Tk()
