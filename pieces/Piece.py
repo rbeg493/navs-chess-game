@@ -1,13 +1,8 @@
 
 
 class Piece:
-    color = None
-
-    # Width and height positions = col and row positions on the board
-    col = 0
-    row = 0
-    icon = ""
     
+    validMoveList = []
     # Movement capabilities
     up = 1
     down = 0
@@ -18,18 +13,16 @@ class Piece:
     diagDownLeft = 0
     diagUpLeft = 0
     
-    id = [row, col]
-    validMoveList = []
-
-    
-    def __init__(self, col, row, icon, color):
+    def __init__(self, col = 0, row = 0, icon = "", color = None):
         self.col = col
         self.row = row
         self.icon = icon
         self.color = color
+        self.id = [row, col]
 
     def __str__(self):
         return f"Color: {self.color},id: {self.id},icon: {self.icon}"
+    
     
     def isValidMove(self, newRow, newCol, board):
         # Check if on board
@@ -311,3 +304,4 @@ class Piece:
             prev_rect = board.rectangles[cell]
             prev_color = colours[cell]
             board.canvasPaint.itemconfig(prev_rect, fill=prev_color)
+        
