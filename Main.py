@@ -10,36 +10,46 @@ def start_new_game(root):
 	playerReserve = []
 	badArmy = []
 	playerArmy = []
-	cs = choiceSelect(root)
-	ls = LevelSetup()
-
+	
 	# Hide the main window
 	root.withdraw()  
 
 	# Select team composition
 	generatePlayerPieces(playerReserve) 
 
-	# Select Level 
-	cs.generate_choices() 
-	cs.display_choices(root)
+	while (True):
+		cs = choiceSelect(root)
+		ls = LevelSetup()
 
-	# Wait until the choice window is closed
-	root.wait_window(cs.childWindow)  
 
-	# Generate enemies based on selected choice
-	cs.generateEnemies(cs.selected_choice, badArmy)
+		# Select Level 
+		cs.generate_choices() 
+		cs.display_choices(root)
 
-	# Draw game board
-	gameBoard, m, w, rectangles, colours = ls.drawBoard(cs.selected_choice, root, playerReserve, badArmy, playerArmy)
-	root.wait_variable(ls.setupComplete)
+		# Wait until the choice window is closed
+		root.wait_window(cs.childWindow)  
 
-	# Play the game
-	game = Gameplay(playerArmy, gameBoard, badArmy)
-	game.playGame(m, w, rectangles, colours, cs.selected_choice)
-	root.wait_variable(game.levelComplete)
+		# Generate enemies based on selected choice
+		cs.generateEnemies(cs.selected_choice, badArmy)
 
-	# Level complete screen
-	print("Congratulations you won!!!!")
+		# Draw game board
+		gameBoard, m, w, rectangles, colours = ls.drawBoard(cs.selected_choice, root, playerReserve, badArmy, playerArmy)
+		root.wait_variable(ls.setupComplete)
+
+		# Play the game
+		game = Gameplay(playerArmy, gameBoard, badArmy)
+		game.playGame(m, w, rectangles, colours, cs.selected_choice)
+		root.wait_variable(game.levelComplete)
+
+		if badArmy:
+			print("Player loses")
+			break
+		else:
+			print("player wins")
+			
+		
+		# Level complete screen
+		print("Congratulations you won!!!!")
 		
 	
 

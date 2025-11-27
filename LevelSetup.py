@@ -10,7 +10,7 @@ class LevelSetup:
         pass
 
     setupComplete = None
-
+   
     def drawBoard(self, selectedChoice, masterWindow, playerReserve, badArmy, playerArmy):
         gameBoard = Board(selectedChoice.boardHeight, selectedChoice.boardWidth, [], {}, 50, 50)
         m = tk.Toplevel(master = masterWindow)

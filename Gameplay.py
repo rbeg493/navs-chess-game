@@ -107,7 +107,7 @@ class Gameplay:
                 if enemyCheck:
                     self.gameBoard.pieces.remove(enemyCheck)
                     self.badArmy.remove(enemyCheck)
-                    self.applyUpgrade(selectedChoice.reward, m)
+                    
                 
                 # Move the selected piece to the new location
                 self.pieceToMove.col = col
@@ -131,7 +131,10 @@ class Gameplay:
                     self.levelComplete.set(True)
                     w.unbind('<Motion>')
                     w.unbind('<Button-1>')
+                    topWindowClose(self, m)
 
+                    #.deiconify()
+                    self.applyUpgrade(selectedChoice.reward, m)
 
             else:
                 # Select piece to move if clicked on own piece
@@ -177,10 +180,16 @@ class Gameplay:
                             w.itemconfig(prev_rect, fill=prev_color)
                             current_hover['cell'] = None
 
+
+        def topWindowClose(self, window):
+            window.master.deiconify()
+            window.destroy()
+            
+
         w.bind('<Motion>', on_mouse_move)
         w.bind('<Button-1>', on_mouse_click)
 
         # Run the window
         #w.update_window()
 
-        
+       
