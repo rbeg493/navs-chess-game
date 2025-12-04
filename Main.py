@@ -39,7 +39,7 @@ def start_new_game(root):
 		game = Gameplay(playerArmy, gameBoard, badArmy)
 		game.playGame(m, w, rectangles, colours, cs.selected_choice)
 		root.wait_variable(game.levelComplete)
-
+		print("I got here3")	
 		if badArmy:
 			print("Player loses")
 			break
