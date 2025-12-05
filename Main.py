@@ -45,8 +45,6 @@ def start_new_game(root):
 			break
 		else:
 			print("player wins")
-			while playerArmy:
-				playerReserve.append(playerArmy.pop(0))
 			
 		
 		# Level complete screen
