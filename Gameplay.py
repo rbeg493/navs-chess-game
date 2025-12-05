@@ -48,10 +48,10 @@ class Gameplay:
                 self.playerArmy[idx].diagDownLeft += 1
                 self.playerArmy[idx].diagUpLeft += 1
             #print(f"New stats: Left {self.playerArmy[idx].left}, Right {self.playerArmy[idx].right}, Up {self.playerArmy[idx].up}, Down {self.playerArmy[idx].down}, Diagonal down right {self.playerArmy[idx].diagDownRight}, Diagonal up right {self.playerArmy[idx].diagUpRight}, Diagonal down left {self.playerArmy[idx].diagDownLeft}, Diagonal up left {self.playerArmy[idx].diagUpLeft}")
-            print("I got here1")
+
             # Close the choice window
-            w.destroy()
-            print("I got here2")
+            w.destroy()  
+
             # go back to main menu?
             self.upgradeComplete.set(TRUE)
             #masterWindow.deiconify()
@@ -137,14 +137,10 @@ class Gameplay:
                 if not self.badArmy or not self.playerArmy:
                     w.unbind('<Motion>')
                     w.unbind('<Button-1>')
-                    print("I got here4")
                     self.applyUpgrade(selectedChoice.reward, m)
                     m.master.wait_variable(self.upgradeComplete)
                     m.destroy()
                     self.levelComplete.set(True)
-                    self.playerTurn.set(False)
-
-                    print("I got here5")
                 else:
 
                     # End player turn
@@ -192,14 +188,12 @@ class Gameplay:
                             prev_color = colours[current_hover['cell']]
                             w.itemconfig(prev_rect, fill=prev_color)
                             current_hover['cell'] = None
-
-
-        while self.levelComplete.get() != True:    
+            
+        while True:
             if self.playerTurn.get() == True:
                 w.bind('<Motion>', on_mouse_move)
-                w.bind('<Button-1>', on_mouse_click)   
+                w.bind('<Button-1>', on_mouse_click)          
                 w.wait_variable(self.playerTurn)
-                print("I got here6")
             else:
 
                 # Stop player interaction
@@ -214,6 +208,11 @@ class Gameplay:
                 # End enemy turn
                 self.playerTurn.set(TRUE)
 
-        print("I got here7")
-        return
+
+
+        w.bind('<Motion>', on_mouse_move)
+        w.bind('<Button-1>', on_mouse_click) 
+        self.playerTurn.set(TRUE)
+
+
        
