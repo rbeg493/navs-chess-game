@@ -12,6 +12,7 @@ class Gameplay:
         self.gameBoard = gameBoard
         self.badArmy = badArmy
         self.pieceToMove = None
+        self.playerTurn = None 
 
         
     def applyUpgrade(self, upgradeID, masterWindow):
@@ -85,11 +86,13 @@ class Gameplay:
     def playGame(self, m, w, rectangles, colours, selectedChoice):
 
         self.levelComplete = BooleanVar(value=False)
+        self.playerTurn = BooleanVar(value=True)
+        self.playerTurn.set(False)
         
         # Track the currently highlighted cell
         current_hover = {'cell': None}
 
-        # Handle click to place player piece
+        # Handle click to move player piece
         def on_mouse_click(event):
             col = event.x // self.gameBoard.cellWidth
             row = event.y // self.gameBoard.cellHeight
@@ -132,7 +135,6 @@ class Gameplay:
 
                 # Check if level is finished
                 if not self.badArmy or not self.playerArmy:
-                    
                     w.unbind('<Motion>')
                     w.unbind('<Button-1>')
                     print("I got here4")
@@ -140,7 +142,13 @@ class Gameplay:
                     m.master.wait_variable(self.upgradeComplete)
                     m.destroy()
                     self.levelComplete.set(True)
+                    self.playerTurn.set(False)
 
+                    print("I got here5")
+                else:
+
+                    # End player turn
+                    self.playerTurn.set(FALSE)
             else:
                 # Select piece to move if clicked on own piece
                 for piece in self.playerArmy:
@@ -184,10 +192,28 @@ class Gameplay:
                             prev_color = colours[current_hover['cell']]
                             w.itemconfig(prev_rect, fill=prev_color)
                             current_hover['cell'] = None
-            
-
-        w.bind('<Motion>', on_mouse_move)
-        w.bind('<Button-1>', on_mouse_click)
 
 
+        while self.levelComplete.get() != True:    
+            if self.playerTurn.get() == True:
+                w.bind('<Motion>', on_mouse_move)
+                w.bind('<Button-1>', on_mouse_click)   
+                w.wait_variable(self.playerTurn)
+                print("I got here6")
+            else:
+
+                # Stop player interaction
+                w.unbind('<Motion>')
+                w.unbind('<Button-1>')
+                
+                # Enemy turn logic here
+                for enemyPiece in self.badArmy:
+                    # implement simple AI
+                    pass
+
+                # End enemy turn
+                self.playerTurn.set(TRUE)
+
+        print("I got here7")
+        return
        

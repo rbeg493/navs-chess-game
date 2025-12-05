@@ -54,8 +54,9 @@ class Piece:
         self.checkDiagDownRight(board)
 
         for cell in self.validMoveList:
-            board.canvasPaint.itemconfig(board.rectangles[(cell[0], cell[1])], fill="green")
+            board.canvasPaint.itemconfig(board.rectangles[(cell[0], cell[1])], fill="lawn green")
     
+
     def checkUp (self, board):
         '''
         Start from piece position and tests cells in direction till max range. Valid cell rules are: Cannot occupy same colour piece, can occupy different colour piece (stops after), Cannot jump over pieces, Cannot go off board. 

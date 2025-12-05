@@ -21,7 +21,6 @@ def start_new_game(root):
 		cs = choiceSelect(root)
 		ls = LevelSetup()
 
-
 		# Select Level 
 		cs.generate_choices() 
 		cs.display_choices(root)
@@ -40,8 +39,7 @@ def start_new_game(root):
 		game = Gameplay(playerArmy, gameBoard, badArmy)
 		game.playGame(m, w, rectangles, colours, cs.selected_choice)
 		root.wait_variable(game.levelComplete)
-		#root.wait_window()
-
+		print("I got here3")	
 		if badArmy:
 			print("Player loses")
 			break
