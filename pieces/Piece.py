@@ -31,7 +31,7 @@ class Piece:
 
         # Check if highlighted green
         fillColor = board.canvasPaint.itemcget(board.rectangles[(newRow, newCol)], "fill")
-        if fillColor == "lawn green":
+        if fillColor == "green":
             return True
         return False
         
