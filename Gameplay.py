@@ -126,7 +126,7 @@ class Gameplay:
                 #w.create_text(x, y, text=self.pieceToMove.icon, fill="blue", font=("Arial", 14, "bold"), tags=f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
                 
                 # Load image
-                img_path = "navs-chess-game\pawn.png"
+                img_path = "pawn.png"
                 img = Image.open(img_path)
                 # Resize image
                 img = img.resize((40, 40), Image.Resampling.LANCZOS)
