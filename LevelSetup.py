@@ -10,6 +10,7 @@ class LevelSetup:
         pass
 
     setupComplete = None
+    game = None
    
     def drawBoard(self, selectedChoice, masterWindow, playerReserve, badArmy, playerArmy):
         gameBoard = Board(selectedChoice.boardHeight, selectedChoice.boardWidth, [], {}, 50, 50)
@@ -177,4 +178,8 @@ class LevelSetup:
     def topWindowClose(self, window, masterWindow):
         window.destroy()
         masterWindow.deiconify()
+        self.setupComplete.set(False)
+        # update the variable waiting in the main loop (game.levelComplete)
+        if self.game:
+            self.game.levelComplete.set(True)
 

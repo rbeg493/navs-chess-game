@@ -29,6 +29,10 @@ def start_new_game(root):
 		# Wait until the choice window is closed
 		root.wait_window(cs.childWindow)  
 
+		# Catch for if the choice window is closed without choice made
+		if(cs.selected_choice is None):
+			break
+		
 		# Generate enemies based on selected choice
 		cs.generateEnemies(cs.selected_choice, badArmy)
 
@@ -36,8 +40,13 @@ def start_new_game(root):
 		gameBoard, m, w, rectangles, colours = ls.drawBoard(cs.selected_choice, root, playerReserve, badArmy, playerArmy)
 		root.wait_variable(ls.setupComplete)
 
+		# Catch for if the level setup window is closed without setup complete
+		if not ls.setupComplete.get():
+			break
+	
 		# Play the game
 		game = Gameplay(playerArmy, gameBoard, badArmy)
+		ls.game = game
 		game.playGame(m, w, rectangles, colours, cs.selected_choice)
 		root.wait_variable(game.levelComplete)
 		#root.wait_window()

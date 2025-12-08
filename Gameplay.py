@@ -13,6 +13,7 @@ class Gameplay:
         self.gameBoard = gameBoard
         self.badArmy = badArmy
         self.pieceToMove = None
+        
 
         
     def applyUpgrade(self, upgradeID, masterWindow):
@@ -22,7 +23,7 @@ class Gameplay:
         w = Toplevel()
         w.title("Apply Upgrade")
         w.geometry("600x200")
-        w.protocol("WM_DELETE_WINDOW", lambda: self.topWindowClose(w, masterWindow))
+        w.protocol("WM_DELETE_WINDOW", lambda: self.topWindowClose(w, masterWindow.master))
 
         upgradeList = [
             {"id": 1, "name": "+1 Left / Right"},
@@ -81,6 +82,7 @@ class Gameplay:
     def topWindowClose(self, window, masterWindow):
         window.destroy()
         masterWindow.deiconify()
+        
 
 
     def playGame(self, m, w, rectangles, colours, selectedChoice):
