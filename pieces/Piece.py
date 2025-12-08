@@ -12,13 +12,15 @@ class Piece:
     diagUpRight = 0
     diagDownLeft = 0
     diagUpLeft = 0
+    img = None
     
-    def __init__(self, col = 0, row = 0, icon = "", color = None):
+    def __init__(self, col = 0, row = 0, icon = "", color = None, img = None):
         self.col = col
         self.row = row
         self.icon = icon
         self.color = color
         self.id = [row, col]
+        self.img  = img
 
     def __str__(self):
         return f"Color: {self.color},id: {self.id},icon: {self.icon}"
