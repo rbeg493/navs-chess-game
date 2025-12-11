@@ -126,19 +126,8 @@ class Gameplay:
                 y = row * self.gameBoard.cellHeight + self.gameBoard.cellHeight // 2
                 
                 #w.create_text(x, y, text=self.pieceToMove.icon, fill="blue", font=("Arial", 14, "bold"), tags=f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
+                w.create_image(x, y, image=self.pieceToMove.img, tags=f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
                 
-                # Load image
-                img_path = "pawn.png"
-                img = Image.open(img_path)
-                # Resize image
-                img = img.resize((40, 40), Image.Resampling.LANCZOS)
-                photo = ImageTk.PhotoImage(img)
-
-                # Create image at center of cell (x, y)
-                w.create_image(x, y, image=photo, tags=f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
-
-                # Store a reference to the PhotoImage object to prevent it from being garbage collected
-                self.pieceToMove.img = photo
 
 
                 # clear highlights

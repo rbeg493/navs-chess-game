@@ -3,6 +3,7 @@ from Board import Board
 from tkinter import Frame, Label, Tk, Canvas, YES, BOTH
 import random
 from pieces.Piece import Piece
+from PIL import Image, ImageTk
 
 class LevelSetup:
 
@@ -88,7 +89,23 @@ class LevelSetup:
                     # Draw the icon in the clicked cell
                     x = col * cellWidth + cellWidth // 2
                     y = row * cellHeight + cellHeight // 2
-                    w.create_text(x, y, text=piece.icon, fill="blue", font=("Arial", 14, "bold"), tags=f"{piece.id[0]}_{piece.id[1]}")
+                    #w.create_text(x, y, text=piece.icon, fill="blue", font=("Arial", 14, "bold"), tags=f"{piece.id[0]}_{piece.id[1]}")
+
+                    # Load image
+                    img_path = "pawn.png"
+                    img = Image.open(img_path)
+
+                    # Resize image
+                    img = img.resize((40, 40), Image.Resampling.LANCZOS)
+                    photo = ImageTk.PhotoImage(img)
+
+                    # Create image at center of cell (x, y)
+                    w.create_image(x, y, image=photo, tags=f"{piece.id[0]}_{piece.id[1]}")
+
+                    # Store a reference to the PhotoImage object to prevent it from being garbage collected
+                    piece.img = photo
+
+
 
                     # Optionally, add to gameBoard.pieces
                     gameBoard.pieces.append(piece)
