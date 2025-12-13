@@ -68,6 +68,7 @@ class choiceSelect:
         for i in range(selectedChoice.enemyNumber):
             newPiece = Piece(0, 0, "Pawn", "red")
             badArmy.append(newPiece)
+            newPiece.setBadMovement()
 
 
     def topWindowClose(window, masterWindow):

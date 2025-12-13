@@ -1,4 +1,5 @@
 
+import random
 from tkinter import *
 from PIL import Image, ImageTk
 
@@ -33,8 +34,6 @@ class Gameplay:
 
 
         def on_choice_click(self, idx):
-            #print(f"Upgrade applied to piece {idx}")
-            #print(f"Old stats: Left {self.playerArmy[idx].left}, Right {self.playerArmy[idx].right}, Up {self.playerArmy[idx].up}, Down {self.playerArmy[idx].down}, Diagonal down right {self.playerArmy[idx].diagDownRight}, Diagonal up right {self.playerArmy[idx].diagUpRight}, Diagonal down left {self.playerArmy[idx].diagDownLeft}, Diagonal up left {self.playerArmy[idx].diagUpLeft}")
 
             #apply upgrade to selected piece
             if upgradeID == 1:
@@ -48,7 +47,6 @@ class Gameplay:
                 self.playerArmy[idx].diagUpRight += 1
                 self.playerArmy[idx].diagDownLeft += 1
                 self.playerArmy[idx].diagUpLeft += 1
-            #print(f"New stats: Left {self.playerArmy[idx].left}, Right {self.playerArmy[idx].right}, Up {self.playerArmy[idx].up}, Down {self.playerArmy[idx].down}, Diagonal down right {self.playerArmy[idx].diagDownRight}, Diagonal up right {self.playerArmy[idx].diagUpRight}, Diagonal down left {self.playerArmy[idx].diagDownLeft}, Diagonal up left {self.playerArmy[idx].diagUpLeft}")
 
             # Close the choice window
             w.destroy()  
@@ -86,6 +84,7 @@ class Gameplay:
 
 
     def playGame(self, m, w, rectangles, colours, selectedChoice):
+        isPlayerTurn = True
 
         self.levelComplete = BooleanVar(value=False)
         
@@ -103,6 +102,11 @@ class Gameplay:
                     self.pieceToMove.clearHighlights(self.gameBoard, colours)
                     self.pieceToMove.validMoveList.clear()
                     self.pieceToMove = None
+
+                    if current_hover['cell']:
+                        prev_rect = rectangles[current_hover['cell']]
+                        prev_color = colours[current_hover['cell']]
+                        w.itemconfig(prev_rect, fill=prev_color)
                     return
 
                 # Delete old piece
@@ -125,27 +129,38 @@ class Gameplay:
                 x = col * self.gameBoard.cellWidth + self.gameBoard.cellWidth // 2
                 y = row * self.gameBoard.cellHeight + self.gameBoard.cellHeight // 2
                 
-                #w.create_text(x, y, text=self.pieceToMove.icon, fill="blue", font=("Arial", 14, "bold"), tags=f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
                 w.create_image(x, y, image=self.pieceToMove.img, tags=f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
-                
-
 
                 # clear highlights
                 self.pieceToMove.clearHighlights(self.gameBoard, colours)
                 self.pieceToMove.validMoveList.clear()
+                if current_hover['cell']:
+                    prev_rect = rectangles[current_hover['cell']]
+                    prev_color = colours[current_hover['cell']]
+                    w.itemconfig(prev_rect, fill=prev_color)
 
                 # Reset piece to move
                 self.pieceToMove = None
 
                 # Check if level is finished
                 if not self.badArmy or not self.playerArmy:
-                    
                     w.unbind('<Motion>')
                     w.unbind('<Button-1>')
                     self.applyUpgrade(selectedChoice.reward, m)
                     m.master.wait_variable(self.upgradeComplete)
                     m.destroy()
                     self.levelComplete.set(True)
+
+                else:
+                    
+                    # Bad army turn
+                    w.unbind('<Motion>')
+                    w.unbind('<Button-1>')
+                    enemyPiece = self.badArmy[random.randint(0, len(self.badArmy) - 1)]
+                    enemyPiece.makeRandomMove(self.gameBoard, w, self.playerArmy, colours)
+                    w.bind('<Motion>', on_mouse_move)
+                    w.bind('<Button-1>', on_mouse_click)
+                    
 
             else:
                 # Select piece to move if clicked on own piece
@@ -191,9 +206,6 @@ class Gameplay:
                             w.itemconfig(prev_rect, fill=prev_color)
                             current_hover['cell'] = None
             
-
+       
         w.bind('<Motion>', on_mouse_move)
         w.bind('<Button-1>', on_mouse_click)
-
-
-       

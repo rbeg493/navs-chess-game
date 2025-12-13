@@ -1,5 +1,8 @@
 
 
+import random
+
+
 class Piece:
     
     validMoveList = []
@@ -42,9 +45,6 @@ class Piece:
         '''
         Highlights valid moves on the board by checking each direction
         '''
-        # Commented out code is possible future implementation using a single method for all directions
-        # for direction in ['up', 'down', 'left', 'right']:
-        #     self.checkDirection(direction, board)
 
         self.checkUp(board)
         self.checkDown(board)
@@ -114,9 +114,8 @@ class Piece:
             if not(1 <= self.row + i <= board.height):
                 canMove = False
                 
-            # Highlight cell if valid
+            # If valid, add to valid moves
             if canMove == True:
-                #board.canvasPaint.itemconfig(board.rectangles[(self.row + i, self.col)], fill="green")
                 self.validMoveList.append((self.row + i, self.col))
 
 
@@ -190,14 +189,14 @@ class Piece:
         for i in range(1,self.diagUpLeft + 1):
             canMove = True
 
-            # Check if target cell diagonal down left is occupied by piece with same colour
+            # Check if target cell diagonal up left is occupied by piece with same colour
             for piece in board.pieces:
                 if piece.color == self.color:
                     if (piece.col == self.col - i and piece.row == self.row - i):
                         canMove = False
                         return
                 else:
-                    # Check if target cell diagonal down left is occupied by piece with different colour
+                    # Check if target cell diagonal up left is occupied by piece with different colour
                     if (piece.col == self.col - i and piece.row == self.row - i):
                         self.validMoveList.append((self.row - i, self.col - i))
                         return
@@ -306,4 +305,57 @@ class Piece:
             prev_rect = board.rectangles[cell]
             prev_color = colours[cell]
             board.canvasPaint.itemconfig(prev_rect, fill=prev_color)
+
+
+    def setBadMovement(self):
+        '''
+        Sets movement capabilities for enemy pieces
+        '''
+        temp = self.up
+        self.up = self.down
+        self.down = temp
+
+        temp = self.diagDownRight
+        self.diagDownRight = self.diagUpRight
+        self.diagUpRight = temp
+
+        temp = self.diagDownLeft
+        self.diagDownLeft = self.diagUpLeft
+        self.diagUpLeft = temp
+
+
+    def makeRandomMove(self, gameBoard, window, playerArmy, colours):
+        '''
+        Makes a basic random valid move for enemy pieces
+        '''
+        self.validMoveList.clear()
+        self.highlightMoves(gameBoard)
+        if self.validMoveList:
+            moveIdx = random.randint(0, len(self.validMoveList) - 1)
+            newPos = self.validMoveList[moveIdx]
+
+            # Delete old piece
+            window.delete(f"{self.id[0]}_{self.id[1]}")
         
+            # Delete any piece at the target location (capture)
+            window.delete(f"{newPos[0]}_{newPos[1]}")
+            enemyCheck = gameBoard.getPieceAt(newPos[0], newPos[1])
+            if enemyCheck:
+                gameBoard.pieces.remove(enemyCheck)
+                playerArmy.remove(enemyCheck)
+                
+            
+            # Move the selected piece to the new location
+            self.row = newPos[0]
+            self.col = newPos[1]
+            self.id = [self.row, self.col]
+
+            # Draw the icon in the clicked cell
+            x = self.col * gameBoard.cellWidth + gameBoard.cellWidth // 2
+            y = self.row * gameBoard.cellHeight + gameBoard.cellHeight // 2
+            
+            window.create_image(x, y, image=self.img, tags=f"{self.id[0]}_{self.id[1]}")
+
+            # clear highlights
+            self.clearHighlights(gameBoard, colours)
+            self.validMoveList.clear()
