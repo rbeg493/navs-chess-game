@@ -157,7 +157,6 @@ class Gameplay:
                     w.unbind('<Motion>')
                     w.unbind('<Button-1>')
                     enemyPiece = self.badArmy[random.randint(0, len(self.badArmy) - 1)]
-                    print(f"Enemy piece moving: from {enemyPiece.id}")
                     enemyPiece.makeRandomMove(self.gameBoard, w, self.playerArmy, colours)
                     w.bind('<Motion>', on_mouse_move)
                     w.bind('<Button-1>', on_mouse_click)
