@@ -86,6 +86,7 @@ class Gameplay:
 
 
     def playGame(self, m, w, rectangles, colours, selectedChoice):
+        isPlayerTurn = True
 
         self.levelComplete = BooleanVar(value=False)
         
@@ -133,6 +134,10 @@ class Gameplay:
                 # clear highlights
                 self.pieceToMove.clearHighlights(self.gameBoard, colours)
                 self.pieceToMove.validMoveList.clear()
+                if current_hover['cell']:
+                    prev_rect = rectangles[current_hover['cell']]
+                    prev_color = colours[current_hover['cell']]
+                    w.itemconfig(prev_rect, fill=prev_color)
 
                 # Reset piece to move
                 self.pieceToMove = None
@@ -191,9 +196,6 @@ class Gameplay:
                             w.itemconfig(prev_rect, fill=prev_color)
                             current_hover['cell'] = None
             
-
+       
         w.bind('<Motion>', on_mouse_move)
         w.bind('<Button-1>', on_mouse_click)
-
-
-       
