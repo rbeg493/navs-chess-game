@@ -61,7 +61,21 @@ class LevelSetup:
             if 1 <= row <= boardHeight and 1 <= col <= boardWidth:
                 x = col * cellWidth + cellWidth // 2
                 y = row * cellHeight + cellHeight // 2
-                w.create_text(x, y, text=piece.icon, fill="red", font=("Arial", 14, "bold"), tags=f"{piece.id[0]}_{piece.id[1]}")
+                #w.create_text(x, y, text=piece.icon, fill="red", font=("Arial", 14, "bold"), tags=f"{piece.id[0]}_{piece.id[1]}")
+
+                # Load image
+                img_path = "Evilpawn.png"
+                img = Image.open(img_path)
+
+                # Resize image
+                img = img.resize((40, 40), Image.Resampling.LANCZOS)
+                photo = ImageTk.PhotoImage(img)
+
+                # Create image at center of cell (x, y)
+                w.create_image(x, y, image=photo, tags=f"{piece.id[0]}_{piece.id[1]}")
+
+                # Store a reference to the PhotoImage object to prevent it from being garbage collected
+                piece.img = photo
                 
         # Display player army icons to the right of the board
         self.listPlayerReserves(boardWidth, cellWidth, cellHeight, w, playerReserve)
@@ -104,8 +118,6 @@ class LevelSetup:
 
                     # Store a reference to the PhotoImage object to prevent it from being garbage collected
                     piece.img = photo
-
-
 
                     # Optionally, add to gameBoard.pieces
                     gameBoard.pieces.append(piece)

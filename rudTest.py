@@ -1,3 +1,2 @@
-
-aList = [0,1]
-print(aList)
+for i in range (1, 0):
+    print(i)

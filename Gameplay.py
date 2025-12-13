@@ -28,7 +28,7 @@ class Gameplay:
 
         upgradeList = [
             {"id": 1, "name": "+1 Left / Right"},
-            {"id": 2, "name": "+1 Forward / Back"},
+            {"id": 2, "name": "+1 Up / Down"},
             {"id": 3, "name": "+1 Diagonal"}
         ]
 
@@ -40,13 +40,13 @@ class Gameplay:
                 self.playerArmy[idx].right += 1
                 self.playerArmy[idx].left += 1
             elif upgradeID == 2:
-                self.playerArmy[idx].forward += 1
-                self.playerArmy[idx].back += 1
+                self.playerArmy[idx].up += 1
+                self.playerArmy[idx].down += 1
             elif upgradeID == 3:
-                self.playerArmy[idx].diagBackRight += 1
-                self.playerArmy[idx].diagForwardRight += 1
-                self.playerArmy[idx].diagBackLeft += 1
-                self.playerArmy[idx].diagForwardLeft += 1
+                self.playerArmy[idx].diagDownRight += 1
+                self.playerArmy[idx].diagUpRight += 1
+                self.playerArmy[idx].diagDownLeft += 1
+                self.playerArmy[idx].diagUpLeft += 1
 
             # Close the choice window
             w.destroy()  
@@ -129,7 +129,6 @@ class Gameplay:
                 x = col * self.gameBoard.cellWidth + self.gameBoard.cellWidth // 2
                 y = row * self.gameBoard.cellHeight + self.gameBoard.cellHeight // 2
                 
-                #w.create_text(x, y, text=self.pieceToMove.icon, fill="blue", font=("Arial", 14, "bold"), tags=f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
                 w.create_image(x, y, image=self.pieceToMove.img, tags=f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
 
                 # clear highlights
@@ -153,8 +152,15 @@ class Gameplay:
                     self.levelComplete.set(True)
 
                 else:
+                    
                     # Bad army turn
+                    w.unbind('<Motion>')
+                    w.unbind('<Button-1>')
                     enemyPiece = self.badArmy[random.randint(0, len(self.badArmy) - 1)]
+                    print(f"Enemy piece moving: from {enemyPiece.id}")
+                    enemyPiece.makeRandomMove(self.gameBoard, w, self.playerArmy, colours)
+                    w.bind('<Motion>', on_mouse_move)
+                    w.bind('<Button-1>', on_mouse_click)
                     
 
             else:
