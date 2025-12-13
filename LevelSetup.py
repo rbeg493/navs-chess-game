@@ -169,7 +169,7 @@ class LevelSetup:
 
         # Randomise enemy positions
         for piece in badArmy:
-            if piece.col ==0:
+            if piece.col == 0:
                 tempWidthPos = random.randint(1, gameBoard.width)
                 tempHeightPos = random.randint(1, 2)
 

@@ -1,4 +1,5 @@
 
+import random
 from tkinter import *
 from PIL import Image, ImageTk
 
@@ -27,28 +28,25 @@ class Gameplay:
 
         upgradeList = [
             {"id": 1, "name": "+1 Left / Right"},
-            {"id": 2, "name": "+1 Up / Down"},
+            {"id": 2, "name": "+1 Forward / Back"},
             {"id": 3, "name": "+1 Diagonal"}
         ]
 
 
         def on_choice_click(self, idx):
-            #print(f"Upgrade applied to piece {idx}")
-            #print(f"Old stats: Left {self.playerArmy[idx].left}, Right {self.playerArmy[idx].right}, Up {self.playerArmy[idx].up}, Down {self.playerArmy[idx].down}, Diagonal down right {self.playerArmy[idx].diagDownRight}, Diagonal up right {self.playerArmy[idx].diagUpRight}, Diagonal down left {self.playerArmy[idx].diagDownLeft}, Diagonal up left {self.playerArmy[idx].diagUpLeft}")
 
             #apply upgrade to selected piece
             if upgradeID == 1:
                 self.playerArmy[idx].right += 1
                 self.playerArmy[idx].left += 1
             elif upgradeID == 2:
-                self.playerArmy[idx].up += 1
-                self.playerArmy[idx].down += 1
+                self.playerArmy[idx].forward += 1
+                self.playerArmy[idx].back += 1
             elif upgradeID == 3:
-                self.playerArmy[idx].diagDownRight += 1
-                self.playerArmy[idx].diagUpRight += 1
-                self.playerArmy[idx].diagDownLeft += 1
-                self.playerArmy[idx].diagUpLeft += 1
-            #print(f"New stats: Left {self.playerArmy[idx].left}, Right {self.playerArmy[idx].right}, Up {self.playerArmy[idx].up}, Down {self.playerArmy[idx].down}, Diagonal down right {self.playerArmy[idx].diagDownRight}, Diagonal up right {self.playerArmy[idx].diagUpRight}, Diagonal down left {self.playerArmy[idx].diagDownLeft}, Diagonal up left {self.playerArmy[idx].diagUpLeft}")
+                self.playerArmy[idx].diagBackRight += 1
+                self.playerArmy[idx].diagForwardRight += 1
+                self.playerArmy[idx].diagBackLeft += 1
+                self.playerArmy[idx].diagForwardLeft += 1
 
             # Close the choice window
             w.destroy()  
@@ -104,6 +102,11 @@ class Gameplay:
                     self.pieceToMove.clearHighlights(self.gameBoard, colours)
                     self.pieceToMove.validMoveList.clear()
                     self.pieceToMove = None
+
+                    if current_hover['cell']:
+                        prev_rect = rectangles[current_hover['cell']]
+                        prev_color = colours[current_hover['cell']]
+                        w.itemconfig(prev_rect, fill=prev_color)
                     return
 
                 # Delete old piece
@@ -128,8 +131,6 @@ class Gameplay:
                 
                 #w.create_text(x, y, text=self.pieceToMove.icon, fill="blue", font=("Arial", 14, "bold"), tags=f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
                 w.create_image(x, y, image=self.pieceToMove.img, tags=f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
-                
-
 
                 # clear highlights
                 self.pieceToMove.clearHighlights(self.gameBoard, colours)
@@ -144,13 +145,17 @@ class Gameplay:
 
                 # Check if level is finished
                 if not self.badArmy or not self.playerArmy:
-                    
                     w.unbind('<Motion>')
                     w.unbind('<Button-1>')
                     self.applyUpgrade(selectedChoice.reward, m)
                     m.master.wait_variable(self.upgradeComplete)
                     m.destroy()
                     self.levelComplete.set(True)
+
+                else:
+                    # Bad army turn
+                    enemyPiece = self.badArmy[random.randint(0, len(self.badArmy) - 1)]
+                    
 
             else:
                 # Select piece to move if clicked on own piece
