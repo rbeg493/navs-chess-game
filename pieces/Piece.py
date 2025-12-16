@@ -311,17 +311,12 @@ class Piece:
         '''
         Sets movement capabilities for enemy pieces
         '''
-        temp = self.up
-        self.up = self.down
-        self.down = temp
+        
+        self.up, self.down = self.down, self.up
+        self.diagDownRight, self.diagUpRight = self.diagUpRight, self.diagDownRight
+        self.diagDownLeft, self.diagUpLeft = self.diagUpLeft, self.diagDownLeft
 
-        temp = self.diagDownRight
-        self.diagDownRight = self.diagUpRight
-        self.diagUpRight = temp
-
-        temp = self.diagDownLeft
-        self.diagDownLeft = self.diagUpLeft
-        self.diagUpLeft = temp
+        
 
 
     def makeRandomMove(self, gameBoard, window, playerArmy, colours):
