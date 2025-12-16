@@ -12,6 +12,13 @@ class choiceSelect:
     #masterWindow = None
     childWindow = None
 
+    upgradeList = [
+    {"id": 1, "name": "+1 Left / Right"},
+    {"id": 2, "name": "+1 Up / Down"},
+    {"id": 3, "name": "+1 Diagonal"}
+    ]
+
+
     def __init__(self,masterWindow):
         self.masterWindow = masterWindow
 
@@ -49,7 +56,10 @@ class choiceSelect:
             # Display choice attributes (customize as needed)
             Label(frame, text=f"Choice {idx+1}", font=("Arial", 14, "bold")).pack(pady=10)
             Label(frame, text=f"Number of Enemies: {getattr(choice, 'enemyNumber', '')}").pack()
-            Label(frame, text=f"Reward ID: {getattr(choice, 'reward', '')}").pack()
+            Label(frame, text=f"Reward ID: {self.upgradeList[idx - 1]['name']}").pack()
+
+            
+
 
             # Make labels clickable too
             for child in frame.winfo_children():
