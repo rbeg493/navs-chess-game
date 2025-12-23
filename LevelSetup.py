@@ -184,26 +184,20 @@ class LevelSetup:
 
 
     def listPlayerReserves(self, boardWidth, cellWidth, cellHeight, w, playerReserve):
-            icon_x = (boardWidth + 1.5) * cellWidth
-            icon_start_y = cellHeight
-            icon_spacing = 30
-            for idx, piece in enumerate(playerReserve):
-                icon_y = icon_start_y + idx * icon_spacing
-                #w.create_text(icon_x, icon_y, text=piece.icon, fill="blue", font=("Arial", 14, "bold"), anchor="w", tags=f"reserveList")
+        icon_x = (boardWidth + 2) * cellWidth
+        icon_start_y = cellHeight
+        for idx, piece in enumerate(playerReserve):
+            icon_y = icon_start_y + idx * cellHeight
 
-                # Load image
-                img_path = "pawn.png"
-                img = Image.open(img_path)
+            # Load image
+            img_path = "pawn.png"
+            img = Image.open(img_path)
 
-                # Resize image
-                img = img.resize((40, 40), Image.Resampling.LANCZOS)
-                photo = ImageTk.PhotoImage(img)
-                piece.img = photo
+            # Resize image
+            piece.img = ImageTk.PhotoImage(img.resize((40, 40), Image.Resampling.LANCZOS))
 
-                # Create image at center of cell (x, y)
-                w.create_image(icon_x, icon_y, image=piece.img, tags="reserveList")
-
-                
+            # Create image at center of cell (x, y)
+            w.create_image(icon_x, icon_y, image=piece.img, tags="reserveList")
 
 
     def topWindowClose(self, window, masterWindow):
