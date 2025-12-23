@@ -146,6 +146,7 @@ class Gameplay:
                 if not self.badArmy or not self.playerArmy:
                     w.unbind('<Motion>')
                     w.unbind('<Button-1>')
+                    print("reward ID to upgrade:", selectedChoice.reward)
                     self.applyUpgrade(selectedChoice.reward, m)
                     m.master.wait_variable(self.upgradeComplete)
                     m.destroy()

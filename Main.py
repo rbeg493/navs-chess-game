@@ -33,6 +33,7 @@ def start_new_game(root):
 		if(cs.selected_choice is None):
 			break
 		
+		print("Selected choice reward ID:", cs.selected_choice.reward)
 		# Generate enemies based on selected choice
 		cs.generateEnemies(cs.selected_choice, badArmy)
 

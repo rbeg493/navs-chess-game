@@ -13,9 +13,9 @@ class choiceSelect:
     childWindow = None
 
     upgradeList = [
-    {"id": 1, "name": "+1 Left / Right"},
-    {"id": 2, "name": "+1 Up / Down"},
-    {"id": 3, "name": "+1 Diagonal"}
+    "+1 Left / Right",
+    "+1 Up / Down",
+    "+1 Diagonal"
     ]
 
 
@@ -27,7 +27,7 @@ class choiceSelect:
         choiceNum = 3
         self.choiceList.clear()
         for i in range(choiceNum):
-            newChoice = Choice(random.randint(2, 4), random.randint(1, 3),5,5)
+            newChoice = Choice(random.randint(2, 3), random.randint(1, 3),5,5)
             self.choiceList.append(newChoice)
 
 
@@ -56,9 +56,11 @@ class choiceSelect:
             # Display choice attributes (customize as needed)
             Label(frame, text=f"Choice {idx+1}", font=("Arial", 14, "bold")).pack(pady=10)
             Label(frame, text=f"Number of Enemies: {getattr(choice, 'enemyNumber', '')}").pack()
-            Label(frame, text=f"Reward ID: {self.upgradeList[idx - 1]['name']}").pack()
+            Label(frame, text=f"Reward: {self.upgradeList[getattr(choice, 'reward', '') - 1]}").pack()
 
-            
+            #lookup reward value by id from upgradeList
+
+
 
 
             # Make labels clickable too
