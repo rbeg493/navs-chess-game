@@ -316,8 +316,6 @@ class Piece:
         self.diagDownRight, self.diagUpRight = self.diagUpRight, self.diagDownRight
         self.diagDownLeft, self.diagUpLeft = self.diagUpLeft, self.diagDownLeft
 
-        
-
 
     def makeRandomMove(self, gameBoard, window, playerArmy, colours):
         '''

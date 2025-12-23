@@ -1,2 +1,5 @@
-for i in range (1, 0):
-    print(i)
+a = 1
+b = 2
+
+a, b = b, a
+print(a, b)
