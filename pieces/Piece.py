@@ -6,6 +6,8 @@ import random
 class Piece:
     
     validMoveList = []
+    upgradesApplied = []
+
     # Movement capabilities
     up = 1
     down = 0
@@ -15,7 +17,7 @@ class Piece:
     diagUpRight = 0
     diagDownLeft = 0
     diagUpLeft = 0
-    img = None
+    
     
     def __init__(self, col = 0, row = 0, icon = "", color = None, img = None):
         self.col = col
@@ -26,7 +28,7 @@ class Piece:
         self.img  = img
 
     def __str__(self):
-        return f"Color: {self.color},id: {self.id},icon: {self.icon}"
+        return f"Color: {self.color}, id: {self.id}, icon: {self.icon}"
     
     
     def isValidMove(self, newRow, newCol, board):

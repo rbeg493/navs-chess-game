@@ -33,27 +33,34 @@ class Gameplay:
         ]
 
 
-        def on_choice_click(self, idx):
+        def on_choice_click(idx):
+
+            piece = self.playerArmy[idx]
 
             #apply upgrade to selected piece
             if upgradeID == 1:
-                self.playerArmy[idx].right += 1
-                self.playerArmy[idx].left += 1
+                piece.right += 1
+                piece.left += 1
             elif upgradeID == 2:
-                self.playerArmy[idx].up += 1
-                self.playerArmy[idx].down += 1
+                piece.up += 1
+                piece.down += 1
             elif upgradeID == 3:
-                self.playerArmy[idx].diagDownRight += 1
-                self.playerArmy[idx].diagUpRight += 1
-                self.playerArmy[idx].diagDownLeft += 1
-                self.playerArmy[idx].diagUpLeft += 1
+                piece.diagDownRight += 1
+                piece.diagUpRight += 1
+                piece.diagDownLeft += 1
+                piece.diagUpLeft += 1
+            print(piece.id, piece.upgradesApplied)
+            piece.upgradesApplied.append(upgradeID)
+            print(piece.id, piece.upgradesApplied)
+
+            for p in self.playerArmy:
+                print(self.playerArmy[0].id)         
 
             # Close the choice window
             w.destroy()  
 
             # go back to main menu?
             self.upgradeComplete.set(TRUE)
-            #masterWindow.deiconify()
 
 
         #display upgrade at the top
@@ -65,15 +72,14 @@ class Gameplay:
         namelbl.grid(column=0, row=0)
         frame.grid(column=0, row=1, columnspan=3, rowspan=2)
 
+        buttonList=[]
         #let player select a piece to upgrade
         for idx, piece in enumerate(self.playerArmy):
-            
-            # Display piece selection
-            buttonList=[]
-
+                        
             # Display a button for each piece that runs
-            for piece in self.playerArmy:
-                newButton = Button(frame, text=f"Piece {idx+1}", command=lambda i=idx: on_choice_click(self, i))
+            #for piece in self.playerArmy:
+            if len(piece.upgradesApplied) < 3:
+                newButton = Button(frame, text=f"Piece {idx+1}", command=lambda: on_choice_click(idx))
                 newButton.grid(column=idx+1, row=1)
                 buttonList.append(newButton)
 
