@@ -33,8 +33,6 @@ class Gameplay:
 
 
         def on_choice_click(idx):
-            print(idx)
-
             piece = self.playerArmy[idx]
 
             #apply upgrade to selected piece
@@ -58,6 +56,14 @@ class Gameplay:
             self.upgradeComplete.set(TRUE)
 
 
+        def noUpgrades():
+             # Close the choice window
+            w.destroy()  
+
+            # go back to main menu?
+            self.upgradeComplete.set(TRUE)
+
+
         #display upgrade at the top
         content = Frame(w)
         frame = Frame(content, borderwidth=5, relief="ridge", width=200, height=100)
@@ -68,16 +74,20 @@ class Gameplay:
         frame.grid(column=0, row=1, columnspan=3, rowspan=2)
 
         buttonList=[]
-        
+
         #let player select a piece to upgrade
         for piece in self.playerArmy:
                         
             # Display a button for each piece that runs
-            #for piece in self.playerArmy:
-            if len(piece.upgradesApplied) < 1:
+            if len(piece.upgradesApplied) < 3:
                 newButton = Button(frame, text=f"Piece {piece.id}", command = lambda i = piece.id: on_choice_click(i))
                 newButton.grid(column=piece.id + 1, row=1)
                 buttonList.append(newButton)
+        
+        # If no pieces available to upgrade, show message
+        if not buttonList:
+            newButton = Button(frame, text="No pieces available for upgrade!", command = lambda: noUpgrades())
+            newButton.grid(column=0, row=2, columnspan=3)
 
     def topWindowClose(self, window, masterWindow):
         window.destroy()
@@ -146,7 +156,6 @@ class Gameplay:
                 if not self.badArmy or not self.playerArmy:
                     w.unbind('<Motion>')
                     w.unbind('<Button-1>')
-                    print("reward ID to upgrade:", selectedChoice.reward)
                     self.applyUpgrade(selectedChoice.reward, m)
                     m.master.wait_variable(self.upgradeComplete)
                     m.destroy()
