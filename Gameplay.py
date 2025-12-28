@@ -16,7 +16,6 @@ class Gameplay:
         self.pieceToMove = None
         
 
-        
     def applyUpgrade(self, upgradeID, masterWindow):
         self.upgradeComplete = BooleanVar(value=False)
 
@@ -34,6 +33,7 @@ class Gameplay:
 
 
         def on_choice_click(idx):
+            print(idx)
 
             piece = self.playerArmy[idx]
 
@@ -49,12 +49,7 @@ class Gameplay:
                 piece.diagUpRight += 1
                 piece.diagDownLeft += 1
                 piece.diagUpLeft += 1
-            print(piece.id, piece.upgradesApplied)
             piece.upgradesApplied.append(upgradeID)
-            print(piece.id, piece.upgradesApplied)
-
-            for p in self.playerArmy:
-                print(self.playerArmy[0].id)         
 
             # Close the choice window
             w.destroy()  
@@ -73,21 +68,21 @@ class Gameplay:
         frame.grid(column=0, row=1, columnspan=3, rowspan=2)
 
         buttonList=[]
+        
         #let player select a piece to upgrade
-        for idx, piece in enumerate(self.playerArmy):
+        for piece in self.playerArmy:
                         
             # Display a button for each piece that runs
             #for piece in self.playerArmy:
-            if len(piece.upgradesApplied) < 3:
-                newButton = Button(frame, text=f"Piece {idx+1}", command=lambda: on_choice_click(idx))
-                newButton.grid(column=idx+1, row=1)
+            if len(piece.upgradesApplied) < 1:
+                newButton = Button(frame, text=f"Piece {piece.id}", command = lambda i = piece.id: on_choice_click(i))
+                newButton.grid(column=piece.id + 1, row=1)
                 buttonList.append(newButton)
 
     def topWindowClose(self, window, masterWindow):
         window.destroy()
         masterWindow.deiconify()
         
-
 
     def playGame(self, m, w, rectangles, colours, selectedChoice):
         isPlayerTurn = True
@@ -116,7 +111,7 @@ class Gameplay:
                     return
 
                 # Delete old piece
-                w.delete(f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
+                w.delete(f"{self.pieceToMove.row}_{self.pieceToMove.col}")
 
                 # Delete any piece at the target location (capture)
                 w.delete(f"{row}_{col}")
@@ -129,13 +124,12 @@ class Gameplay:
                 # Move the selected piece to the new location
                 self.pieceToMove.col = col
                 self.pieceToMove.row = row
-                self.pieceToMove.id = [row, col]
 
                 # Draw the icon in the clicked cell
                 x = col * self.gameBoard.cellWidth + self.gameBoard.cellWidth // 2
                 y = row * self.gameBoard.cellHeight + self.gameBoard.cellHeight // 2
                 
-                w.create_image(x, y, image=self.pieceToMove.img, tags=f"{self.pieceToMove.id[0]}_{self.pieceToMove.id[1]}")
+                w.create_image(x, y, image=self.pieceToMove.img, tags=f"{self.pieceToMove.row}_{self.pieceToMove.col}")
 
                 # clear highlights
                 self.pieceToMove.clearHighlights(self.gameBoard, colours)

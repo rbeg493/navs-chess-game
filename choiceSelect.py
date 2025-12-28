@@ -72,7 +72,8 @@ class choiceSelect:
             w.grid_columnconfigure(i, weight=1)
 
 
-    def generateEnemies(self, selectedChoice, badArmy):
+    def generateEnemies(self, selectedChoice, badArmy, numOfPieces):
+
         # Clear existing enemies
         badArmy.clear()
 
@@ -81,6 +82,8 @@ class choiceSelect:
             newPiece = Piece(0, 0, "Pawn", "red")
             badArmy.append(newPiece)
             newPiece.setBadMovement()
+            numOfPieces += 1
+
 
 
     def topWindowClose(window, masterWindow):

@@ -10,12 +10,13 @@ def start_new_game(root):
 	playerReserve = []
 	badArmy = []
 	playerArmy = []
+	numOfPieces = 0
 	
 	# Hide the main window
 	root.withdraw()  
 
 	# Select team composition
-	generatePlayerPieces(playerReserve) 
+	generatePlayerPieces(numOfPieces, playerReserve) 
 
 	while (True):
 		cs = choiceSelect(root)
@@ -35,7 +36,7 @@ def start_new_game(root):
 		
 		print("Selected choice reward ID:", cs.selected_choice.reward)
 		# Generate enemies based on selected choice
-		cs.generateEnemies(cs.selected_choice, badArmy)
+		cs.generateEnemies(cs.selected_choice, badArmy, numOfPieces)
 
 		# Draw game board
 		gameBoard, m, w, rectangles, colours = ls.drawBoard(cs.selected_choice, root, playerReserve, badArmy, playerArmy)

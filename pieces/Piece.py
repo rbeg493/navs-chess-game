@@ -5,27 +5,25 @@ import random
 
 class Piece:
     
-    validMoveList = []
-    upgradesApplied = []
-
-    # Movement capabilities
-    up = 1
-    down = 0
-    left = 0
-    right = 0
-    diagDownRight = 0
-    diagUpRight = 0
-    diagDownLeft = 0
-    diagUpLeft = 0
-    
-    
-    def __init__(self, col = 0, row = 0, icon = "", color = None, img = None):
+    def __init__(self, id, col = 0, row = 0, icon = "", color = None, img = None):
         self.col = col
         self.row = row
         self.icon = icon
         self.color = color
-        self.id = [row, col]
+        self.id = id
         self.img  = img
+        self.upgradesApplied = []
+        self.validMoveList = []
+
+        # Movement capabilities
+        self.up = 1
+        self.down = 0
+        self.left = 0
+        self.right = 0
+        self.diagDownRight = 0
+        self.diagUpRight = 0
+        self.diagDownLeft = 0
+        self.diagUpLeft = 0
 
     def __str__(self):
         return f"Color: {self.color}, id: {self.id}, icon: {self.icon}"
@@ -330,7 +328,7 @@ class Piece:
             newPos = self.validMoveList[moveIdx]
 
             # Delete old piece
-            window.delete(f"{self.id[0]}_{self.id[1]}")
+            window.delete(f"{self.row}_{self.col}")
         
             # Delete any piece at the target location (capture)
             window.delete(f"{newPos[0]}_{newPos[1]}")
@@ -343,13 +341,12 @@ class Piece:
             # Move the selected piece to the new location
             self.row = newPos[0]
             self.col = newPos[1]
-            self.id = [self.row, self.col]
 
             # Draw the icon in the clicked cell
             x = self.col * gameBoard.cellWidth + gameBoard.cellWidth // 2
             y = self.row * gameBoard.cellHeight + gameBoard.cellHeight // 2
             
-            window.create_image(x, y, image=self.img, tags=f"{self.id[0]}_{self.id[1]}")
+            window.create_image(x, y, image=self.img, tags=f"{self.row}_{self.col}")
 
             # clear highlights
             self.clearHighlights(gameBoard, colours)
