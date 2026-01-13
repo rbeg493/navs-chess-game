@@ -79,10 +79,11 @@ class choiceSelect:
 
         # Generate enemies
         for i in range(selectedChoice.enemyNumber):
-            newPiece = Piece(0, 0, "Pawn", "red")
-            badArmy.append(newPiece)
+            newPiece = Piece(id = numOfPieces, col = 0, row =  0, icon = "Pawn", color = "red")
+            badArmy[newPiece.id] = newPiece
             newPiece.setBadMovement()
             numOfPieces += 1
+            print(f"Generated enemy piece with ID: {newPiece.id}")
 
 
 

@@ -67,7 +67,7 @@ class Piece:
             canMove = True
 
             # Check if target cell up is occupied by piece with same colour
-            for piece in board.pieces:
+            for piece in board.pieces.values():
                 if piece.color == self.color:
                     if piece.col == self.col and piece.row == self.row - i:
                         canMove = False
@@ -75,7 +75,6 @@ class Piece:
                 else:
                     # Check if target cell up is occupied by piece with different colour
                     if piece.col == self.col and piece.row == self.row - i:
-                        #board.canvasPaint.itemconfig(board.rectangles[(self.row - i, self.col)], fill="green")
                         self.validMoveList.append((self.row - i, self.col))
                         return
 
@@ -98,7 +97,7 @@ class Piece:
             canMove = True
 
             # Check if target cell down is occupied by piece with same colour
-            for piece in board.pieces:
+            for piece in board.pieces.values():
                 if piece.color == self.color:
                     if piece.col == self.col and piece.row == self.row + i:
                         canMove = False
@@ -128,7 +127,7 @@ class Piece:
             canMove = True
 
             # Check if target cell right is occupied by piece with same colour
-            for piece in board.pieces:
+            for piece in board.pieces.values():
                 if piece.color == self.color:
                     if piece.col == self.col + i and piece.row == self.row:
                         canMove = False
@@ -159,7 +158,7 @@ class Piece:
             canMove = True
 
             # Check if target cell left is occupied by piece with same colour
-            for piece in board.pieces:
+            for piece in board.pieces.values():
                 if piece.color == self.color:
                     if piece.col == self.col - i and piece.row == self.row:
                         canMove = False
@@ -190,7 +189,7 @@ class Piece:
             canMove = True
 
             # Check if target cell diagonal up left is occupied by piece with same colour
-            for piece in board.pieces:
+            for piece in board.pieces.values():
                 if piece.color == self.color:
                     if (piece.col == self.col - i and piece.row == self.row - i):
                         canMove = False
@@ -219,7 +218,7 @@ class Piece:
             canMove = True
 
             # Check if target cell diagonal up right is occupied by piece with same colour
-            for piece in board.pieces:
+            for piece in board.pieces.values():
                 if piece.color == self.color:
                     if (piece.col == self.col + i and piece.row == self.row - i):
                         canMove = False
@@ -248,7 +247,7 @@ class Piece:
             canMove = True
 
             # Check if target cell diagonal down left is occupied by piece with same colour
-            for piece in board.pieces:
+            for piece in board.pieces.values():
                 if piece.color == self.color:
                     if (piece.col == self.col - i and piece.row == self.row + i):
                         canMove = False
@@ -277,7 +276,7 @@ class Piece:
             canMove = True
 
             # Check if target cell diagonal down right is occupied by piece with same colour
-            for piece in board.pieces:
+            for piece in board.pieces.values():
                 if piece.color == self.color:
                     if (piece.col == self.col + i and piece.row == self.row + i):
                         canMove = False
@@ -334,8 +333,9 @@ class Piece:
             window.delete(f"{newPos[0]}_{newPos[1]}")
             enemyCheck = gameBoard.getPieceAt(newPos[0], newPos[1])
             if enemyCheck:
-                gameBoard.pieces.remove(enemyCheck)
-                playerArmy.remove(enemyCheck)
+                gameBoard.pieces.pop(enemyCheck)
+                playerArmy.pop(enemyCheck)
+                print(f"Player piece {enemyCheck} captured!")
                 
             
             # Move the selected piece to the new location

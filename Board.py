@@ -9,9 +9,10 @@ class Board:
         self.cellHeight = cellHeight
 
     def getPieceAt(self, row, col):
-        for piece in self.pieces:
+        for pieceID in self.pieces:
+            piece = self.pieces[pieceID]
             if piece.row == row and piece.col == col:
-                return piece
+                return pieceID
         return None
 
     

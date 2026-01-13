@@ -7,9 +7,9 @@ from Gameplay import *
 
 
 def start_new_game(root):
-	playerReserve = []
-	badArmy = []
-	playerArmy = []
+	playerReserve = {}
+	badArmy = {}
+	playerArmy = {}
 	numOfPieces = 0
 	
 	# Hide the main window
@@ -58,7 +58,8 @@ def start_new_game(root):
 		else:
 			print("player wins")
 			while playerArmy:
-				playerReserve.append(playerArmy.pop(0))
+				pieceID, piece = playerArmy.popitem()
+				playerReserve[pieceID] = piece
 			
 		
 		# Level complete screen

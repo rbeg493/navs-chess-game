@@ -1,12 +1,4 @@
 
 
-class Test():
-    value = []
-
-
-
-
-a = Test()
-b = Test()
-
-a.value.append(1)
+for i in range (3):
+    print(i)

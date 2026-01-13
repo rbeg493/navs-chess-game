@@ -76,7 +76,8 @@ class Gameplay:
         buttonList=[]
 
         #let player select a piece to upgrade
-        for piece in self.playerArmy:
+        for pieceID in self.playerArmy:
+            piece = self.playerArmy[pieceID]
                         
             # Display a button for each piece that runs
             if len(piece.upgradesApplied) < 3:
@@ -127,8 +128,8 @@ class Gameplay:
                 w.delete(f"{row}_{col}")
                 enemyCheck = self.gameBoard.getPieceAt(row, col)
                 if enemyCheck:
-                    self.gameBoard.pieces.remove(enemyCheck)
-                    self.badArmy.remove(enemyCheck)
+                    self.gameBoard.pieces.pop(enemyCheck)
+                    self.badArmy.pop(enemyCheck)
                     
                 
                 # Move the selected piece to the new location
@@ -174,7 +175,8 @@ class Gameplay:
 
             else:
                 # Select piece to move if clicked on own piece
-                for piece in self.playerArmy:
+                for pieceID in self.playerArmy:
+                    piece = self.playerArmy[pieceID]
                     if piece.col == col and piece.row == row:
                         self.pieceToMove = piece
 
