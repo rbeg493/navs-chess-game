@@ -13,7 +13,7 @@ class LevelSetup:
     setupComplete = None
     game = None
    
-    def drawBoard(self, selectedChoice, masterWindow, playerReserve, badArmy, playerArmy):
+    def drawBoard(self, selectedChoice, masterWindow, playerReserve, badArmy, playerArmy) -> tuple[Board, tk.Toplevel, Canvas, dict, dict]:
         gameBoard = Board(selectedChoice.boardHeight, selectedChoice.boardWidth, {}, {}, 50, 50)
         m = tk.Toplevel(master = masterWindow)
         frame = Frame(m)
@@ -31,7 +31,6 @@ class LevelSetup:
         gameBoard.canvasPaint = w
         w.pack(expand=YES, fill=BOTH)
         m.protocol("WM_DELETE_WINDOW", lambda: self.topWindowClose(m, masterWindow))
-
         self.placeEnemies(gameBoard, badArmy)
 
         # Store rectangle IDs and their positions
@@ -172,18 +171,18 @@ class LevelSetup:
         # Randomise enemy positions
         for pieceID in badArmy:
             piece = badArmy[pieceID]
-            if piece.col == 0:
-                tempWidthPos = random.randint(1, gameBoard.width)
-                tempHeightPos = random.randint(1, 2)
+            #if piece.col == 0:
+            tempWidthPos = random.randint(1, gameBoard.width)
+            tempHeightPos = random.randint(1, 2)
 
-                # Ensure no two enemies occupy the same position
-                for p in gameBoard.pieces.values():
-                    while (p.col == tempWidthPos and p.row == tempHeightPos):
-                        tempWidthPos = random.randint(1, gameBoard.width)
-                        tempHeightPos = random.randint(1, 2)
-                piece.col = tempWidthPos
-                piece.row = tempHeightPos
-                gameBoard.pieces[pieceID] = piece
+            # Ensure no two enemies occupy the same position
+            for p in gameBoard.pieces.values():
+                while (p.col == tempWidthPos and p.row == tempHeightPos):
+                    tempWidthPos = random.randint(1, gameBoard.width)
+                    tempHeightPos = random.randint(1, 2) #Enemies can only spawn in top 2 rows
+            piece.col = tempWidthPos
+            piece.row = tempHeightPos
+            gameBoard.pieces[pieceID] = piece
 
 
     def listPlayerReserves(self, boardWidth, cellWidth, cellHeight, w, playerReserve):

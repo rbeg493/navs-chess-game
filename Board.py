@@ -1,6 +1,6 @@
 class Board:
     canvasPaint = None
-    def __init__(self, boardWidth, boardHeight, pieces, rectangles, cellWidth = 50, cellHeight = 50):
+    def __init__(self, boardWidth, boardHeight, rectangles, pieces = {}, cellWidth = 50, cellHeight = 50):
         self.width = boardWidth
         self.height = boardHeight
         self.pieces = pieces

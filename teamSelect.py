@@ -1,8 +1,8 @@
 from pieces.Piece import Piece
 
 
-def generatePlayerPieces(numOfPieces, playerReserve):
+def generatePlayerPieces(playerReserve):
 	for i in range(3):
-		newPiece = Piece(numOfPieces, 0, 0, "Pawn", "blue")
+		newPiece = Piece(0, 0, "Pawn", "blue")
 		playerReserve[newPiece.id] = newPiece
-		numOfPieces += 1
+

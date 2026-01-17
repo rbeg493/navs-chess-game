@@ -4,13 +4,16 @@ import random
 
 
 class Piece:
+
+    numOfPieces = 1
     
-    def __init__(self, id, col = 0, row = 0, icon = "", color = None, img = None):
+    def __init__(self, col = 0, row = 0, icon = "", color = None, img = None):
         self.col = col
         self.row = row
         self.icon = icon
         self.color = color
-        self.id = id
+        self.id = Piece.numOfPieces
+        Piece.numOfPieces += 1
         self.img  = img
         self.upgradesApplied = []
         self.validMoveList = []
@@ -57,6 +60,7 @@ class Piece:
 
         for cell in self.validMoveList:
             board.canvasPaint.itemconfig(board.rectangles[(cell[0], cell[1])], fill="green")
+        
     
     def checkUp (self, board):
         '''
@@ -335,7 +339,6 @@ class Piece:
             if enemyCheck:
                 gameBoard.pieces.pop(enemyCheck)
                 playerArmy.pop(enemyCheck)
-                print(f"Player piece {enemyCheck} captured!")
                 
             
             # Move the selected piece to the new location
