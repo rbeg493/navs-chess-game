@@ -13,8 +13,8 @@ class LevelSetup:
     setupComplete = None
     game = None
    
-    def drawBoard(self, selectedChoice, masterWindow, playerReserve, badArmy, playerArmy):
-        gameBoard = Board(selectedChoice.boardHeight, selectedChoice.boardWidth, [], {}, 50, 50)
+    def drawBoard(self, selectedChoice, masterWindow, playerReserve, badArmy, playerArmy) -> tuple[Board, tk.Toplevel, Canvas, dict, dict]:
+        gameBoard = Board(selectedChoice.boardHeight, selectedChoice.boardWidth, {}, {}, 50, 50)
         m = tk.Toplevel(master = masterWindow)
         frame = Frame(m)
         frame.pack(expand=YES, fill=BOTH)
@@ -31,7 +31,6 @@ class LevelSetup:
         gameBoard.canvasPaint = w
         w.pack(expand=YES, fill=BOTH)
         m.protocol("WM_DELETE_WINDOW", lambda: self.topWindowClose(m, masterWindow))
-
         self.placeEnemies(gameBoard, badArmy)
 
         # Store rectangle IDs and their positions
@@ -54,7 +53,8 @@ class LevelSetup:
         gameBoard.rectangles = rectangles
         
         # Draw enemy piece names on their positions
-        for piece in badArmy:
+        for pieceID in badArmy:
+            piece = badArmy[pieceID]
             # Assume piece.col and piece.row are 1-based
             col = piece.col
             row = piece.row
@@ -89,12 +89,15 @@ class LevelSetup:
             if boardHeight - 1 <= row <= boardHeight and 1 <= col <= boardWidth:
                 
                 # Ensure not placing on occupied square
-                occupiedSquares = [(p.row, p.col) for p in gameBoard.pieces]
+                occupiedSquares = []
+                for pieceID in gameBoard.pieces:
+                    piece = gameBoard.pieces[pieceID]
+                    occupiedSquares.append((piece.row, piece.col))
                 if (row, col) not in occupiedSquares:
                 
                     # Loop through player reserve to find a piece to place
-                    piece = playerReserve.pop(0)
-                    playerArmy.append(piece)
+                    pieceID, piece = playerReserve.popitem()
+                    playerArmy[pieceID] = piece
                     piece.col = col
                     piece.row = row
 
@@ -106,7 +109,7 @@ class LevelSetup:
                     w.create_image(x, y, image=piece.img, tags=f"{piece.row}_{piece.col}")
 
                     # Optionally, add to gameBoard.pieces
-                    gameBoard.pieces.append(piece)
+                    gameBoard.pieces[pieceID] = piece
 
                     # Redraw player reserves
                     # Inefficient. Maybe optimize later.
@@ -166,25 +169,28 @@ class LevelSetup:
     def placeEnemies(self, gameBoard, badArmy):
 
         # Randomise enemy positions
-        for piece in badArmy:
-            if piece.col == 0:
-                tempWidthPos = random.randint(1, gameBoard.width)
-                tempHeightPos = random.randint(1, 2)
+        for pieceID in badArmy:
+            piece = badArmy[pieceID]
+            #if piece.col == 0:
+            tempWidthPos = random.randint(1, gameBoard.width)
+            tempHeightPos = random.randint(1, 2)
 
-                # Ensure no two enemies occupy the same position
-                while any(p.col == tempWidthPos and p.row == tempHeightPos for p in gameBoard.pieces):
+            # Ensure no two enemies occupy the same position
+            for p in gameBoard.pieces.values():
+                while (p.col == tempWidthPos and p.row == tempHeightPos):
                     tempWidthPos = random.randint(1, gameBoard.width)
-                    tempHeightPos = random.randint(1, 2)
-                piece.col = tempWidthPos
-                piece.row = tempHeightPos
-            gameBoard.pieces.append(piece)
+                    tempHeightPos = random.randint(1, 2) #Enemies can only spawn in top 2 rows
+            piece.col = tempWidthPos
+            piece.row = tempHeightPos
+            gameBoard.pieces[pieceID] = piece
 
 
     def listPlayerReserves(self, boardWidth, cellWidth, cellHeight, w, playerReserve):
         icon_x = (boardWidth + 2) * cellWidth
         icon_start_y = cellHeight
-        for idx, piece in enumerate(playerReserve):
+        for idx, pieceID in enumerate(playerReserve):
             icon_y = icon_start_y + idx * cellHeight
+            piece = playerReserve[pieceID]
 
             # Load image
             img_path = "pawn.png"

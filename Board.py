@@ -1,6 +1,6 @@
 class Board:
     canvasPaint = None
-    def __init__(self, boardWidth, boardHeight, pieces, rectangles, cellWidth = 50, cellHeight = 50):
+    def __init__(self, boardWidth, boardHeight, rectangles, pieces = {}, cellWidth = 50, cellHeight = 50):
         self.width = boardWidth
         self.height = boardHeight
         self.pieces = pieces
@@ -9,9 +9,10 @@ class Board:
         self.cellHeight = cellHeight
 
     def getPieceAt(self, row, col):
-        for piece in self.pieces:
+        for pieceID in self.pieces:
+            piece = self.pieces[pieceID]
             if piece.row == row and piece.col == col:
-                return piece
+                return pieceID
         return None
 
     

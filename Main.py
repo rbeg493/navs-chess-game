@@ -7,16 +7,15 @@ from Gameplay import *
 
 
 def start_new_game(root):
-	playerReserve = []
-	badArmy = []
-	playerArmy = []
-	numOfPieces = 0
+	playerReserve = {}
+	badArmy = {}
+	playerArmy = {}
 	
 	# Hide the main window
 	root.withdraw()  
 
 	# Select team composition
-	generatePlayerPieces(numOfPieces, playerReserve) 
+	generatePlayerPieces(playerReserve) 
 
 	while (True):
 		cs = choiceSelect(root)
@@ -35,7 +34,7 @@ def start_new_game(root):
 			break
 		
 		# Generate enemies based on selected choice
-		cs.generateEnemies(cs.selected_choice, badArmy, numOfPieces)
+		cs.generateEnemies(cs.selected_choice, badArmy)
 
 		# Draw game board
 		gameBoard, m, w, rectangles, colours = ls.drawBoard(cs.selected_choice, root, playerReserve, badArmy, playerArmy)
@@ -44,12 +43,11 @@ def start_new_game(root):
 		# Catch for if the level setup window is closed without setup complete
 		if not ls.setupComplete.get():
 			break
-	
+
 		# Play the game
-		game = Gameplay(playerArmy, gameBoard, badArmy)
-		ls.game = game
-		game.playGame(m, w, rectangles, colours, cs.selected_choice)
-		root.wait_variable(game.levelComplete)
+		ls.game = Gameplay(playerArmy, gameBoard, badArmy)
+		ls.game.playGame(m, w, rectangles, colours, cs.selected_choice)
+		root.wait_variable(ls.game.levelComplete)
 		#root.wait_window()
 
 		if badArmy:
@@ -58,7 +56,8 @@ def start_new_game(root):
 		else:
 			print("player wins")
 			while playerArmy:
-				playerReserve.append(playerArmy.pop(0))
+				pieceID, piece = playerArmy.popitem()
+				playerReserve[pieceID] = piece
 			
 		
 		# Level complete screen
